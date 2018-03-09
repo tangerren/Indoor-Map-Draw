@@ -1,6 +1,8 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { Map, TileLayer, Marker } from 'leaflet';
 
+import { DrawToolComponent } from './draw-tool/draw-tool.component';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -9,13 +11,13 @@ import { Map, TileLayer, Marker } from 'leaflet';
 
 
 
-export class AppComponent  implements OnInit {
+export class AppComponent implements OnInit {
 
+  map: any;
   constructor(protected elementRef: ElementRef) {
 
   }
 
-  title = 'app';
   // tslint:disable-next-line:use-life-cycle-interface
   ngOnInit() {
     this.createMap();
@@ -27,13 +29,13 @@ export class AppComponent  implements OnInit {
     let ele = this.elementRef.nativeElement.querySelector('#map');
     console.log(ele);
     // tslint:disable-next-line:prefer-const
-    let map = new Map(ele).setView([51.505, -0.09], 13);
+    this.map = new Map(ele).setView([51.505, -0.09], 13);
 
     new TileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
+    }).addTo(this.map);
 
-    new Marker([51.5, -0.09]).addTo(map)
+    new Marker([51.5, -0.09]).addTo(this.map)
       .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
       .openPopup();
   }

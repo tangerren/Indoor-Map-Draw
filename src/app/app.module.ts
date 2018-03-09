@@ -3,11 +3,13 @@ import { NgModule } from '@angular/core';
 
 
 import { AppComponent } from './app.component';
+import { DrawToolComponent } from './draw-tool/draw-tool.component';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    DrawToolComponent
   ],
   imports: [
     BrowserModule
