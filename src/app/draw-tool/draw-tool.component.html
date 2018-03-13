@@ -5,4 +5,10 @@
 	<button (click)="draw('Rectangle')">画矩形</button>
 	<button (click)="draw('Circle')">画圆</button>
 	<button (click)="draw('Polygon')">画面</button>
+	<button (click)="save())">保存</button>
+	<div style="background-color:bisque;width:200px;height:200px;">
+		<ul>
+			<li *ngFor="let item of drawnItems;let i = index;trackBy:_leaflet_id;let isFirst=first;">{{isFirst?'XX大厦':('第'+i+'层,id为'+item._leaflet_id)}}</li>
+		</ul>
+	</div>
 </div>

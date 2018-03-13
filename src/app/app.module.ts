@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { DrawToolComponent } from './draw-tool/draw-tool.component';
+import { GeojsonService } from './services/geojson.service';
 
 
 @NgModule({
@@ -14,7 +15,7 @@ import { DrawToolComponent } from './draw-tool/draw-tool.component';
   imports: [
     BrowserModule
   ],
-  providers: [],
+  providers: [GeojsonService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
