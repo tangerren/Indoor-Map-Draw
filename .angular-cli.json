@@ -19,8 +19,8 @@
     "prefix": "app",
     "styles": [
       "styles.css",
-      "../node_modules/leaflet/dist/leaflet.css",
-      "../node_modules/leaflet-draw/dist/leaflet.draw.css"
+      "../node_modules/openlayers/dist/ol.css",
+      "../node_modules/bootstrap/dist/css/bootstrap.css"
     ],
     "scripts": [],
     "environmentSource": "environments/environment.ts",
