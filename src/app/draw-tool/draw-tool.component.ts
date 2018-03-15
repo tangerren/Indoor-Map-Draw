@@ -1,8 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-import { FeatureGroup, Control, Draw } from 'leaflet';
+import { Map, interaction, layer, source, style, Feature } from 'openlayers';
 
-import 'leaflet-draw';
 
 import { GeojsonService } from '../services/geojson.service';
 
@@ -14,59 +13,126 @@ import { GeojsonService } from '../services/geojson.service';
 export class DrawToolComponent implements OnInit {
 
     @Input() map: any;
-    drawnItems: FeatureGroup[] = [];
+
+    private vectorLayer: layer.Vector;
+    private polygonDraw: interaction.Draw;
+    private polygonModify: interaction.Modify;
+    private polygonSelect: interaction.Select;
+    private features: Feature[][] = [];
+
+    private layerSource = new source.Vector();
+    private style = new style.Style({
+        fill: new style.Fill({
+            color: 'rgba(255, 255, 255, 0.2)'
+        }),
+        stroke: new style.Stroke({
+            color: '#ffcc33',
+            width: 6,
+            lineJoin: 'bevel',
+            lineDash: [10, 10, 10],
+            lineCap: 'square'
+        }),
+        image: new style.Circle({
+            radius: 7,
+            fill: new style.Fill({
+                color: '#ffcc33'
+            })
+        })
+    });
+
     constructor(private geojsonService: GeojsonService) { }
 
     ngOnInit() {
-
-    }
-
-    /**
-     * 每个Floor对应一个drawnItems
-     * @param type 绘制类型
-     */
-    creat(type) {
-        const floorIndex = this.drawnItems.length;
-        if (floorIndex === 0 && type === 'floor') {
-            console.log('请先创建Mall！');
-            return;
-        }
-        this.drawnItems[floorIndex] = new FeatureGroup();
-        // this.drawnItems[floorIndex].index = floorIndex;
-        this.map.addLayer(this.drawnItems[floorIndex]);
-        // 清除前几个图层绑定的 draw:created
-        this.clearOnDrawCreated();
-        this.map.on(Draw.Event.CREATED, (event) => {
-            this.drawnItems[floorIndex].addLayer(event.layer);
-            event.layer.feature = {};
-            event.layer.feature.properties = { id: this.randomString(32) };
+        // 创建绘图图层
+        this.vectorLayer = new layer.Vector({
+            source: this.layerSource,
+            style: this.style
+        });
+        this.map.addLayer(this.vectorLayer);
+        // 创建绘图要素
+        this.polygonDraw = new interaction.Draw({
+            source: this.layerSource,
+            type: 'Polygon'
+        });
+        // 添加绘图交互
+        this.map.addInteraction(this.polygonDraw);
+        this.polygonDraw.setActive(false);
+        // 添加捕捉功能
+        // The snap interaction must be added after the Modify and Draw interactions
+        // in order for its map browser event handlers to be fired first. Its handlers
+        // are responsible of doing the snapping.
+        const snap = new interaction.Snap({
+            source: this.vectorLayer.getSource()
+        });
+        this.map.addInteraction(snap);
+        // 选中交互
+        this.polygonSelect = new interaction.Select();
+        this.map.addInteraction(this.polygonSelect);
+        this.polygonSelect.setActive(false);
+        // 选中之后编辑交互
+        this.polygonModify = new interaction.Modify({
+            features: this.polygonSelect.getFeatures()
+        });
+        this.map.addInteraction(this.polygonModify);
+        this.polygonModify.setActive(false);
+        // 注册选中事件
+        const selectedFeatures = this.polygonSelect.getFeatures();
+        this.polygonSelect.on('change:active', function () {
+            selectedFeatures.forEach(selectedFeatures.remove, selectedFeatures);
         });
     }
 
-    private clearOnDrawCreated() {
-        this.map.off('draw:created');
+    /**
+     * 建筑物轮廓存在vectorLayer中，其他的楼层存放在feature数组中
+     * @param type 绘制类型
+     */
+    creat(type) {
+        const floorIndex = this.features.length;
+        const tempFeatures = this.layerSource.getFeatures();
+        if (type === 'floor' && tempFeatures.length === 0) {
+            console.log('请先创建Mall！');
+            return;
+        } else {
+            if (type === 'floor' && tempFeatures.length !== 1) {
+                // 如果是新建Floor，则把上次绘制的Floor放到临时缓存图层数组中
+                // 除去第一个要素（Mall的轮廓）之外的就是上一层Floor的要素
+                this.features[floorIndex] = tempFeatures.slice(1);
+                this.features[floorIndex].forEach((item) => {
+                    this.layerSource.removeFeature(item);
+                });
+            }
+        }
+        this.clearInteraction();
+        this.polygonDraw.setActive(true);
     }
 
+    private clearInteraction() {
+        this.polygonSelect.setActive(false);
+        this.polygonModify.setActive(false);
+        this.polygonDraw.setActive(false);
+    }
+
+    // log st.
     log() {
-        console.log(this.drawnItems);
+        console.log(this.vectorLayer);
+        console.log(this.layerSource);
+        console.log('当前图层中的要素：');
+        console.log(this.vectorLayer.getSource().getFeatures());
+        console.log('当前缓存中的要素：');
+        console.log(this.features);
     }
 
-    draw(type) {
-        if (type === 'Rectangle') {
-            const a = new Draw.Rectangle(this.map);
-            a.initialize(this.map, {});
-            a.enable();
-        }
-        if (type === 'Circle') {
-            const a = new Draw.Circle(this.map);
-            a.initialize(this.map, {});
-            a.enable();
-        }
-        if (type === 'Polygon') {
-            const a = new Draw.Polygon(this.map);
-            a.initialize(this.map, {});
-            a.enable();
-        }
+    draw(event: Event, type) {
+        event.stopPropagation();
+        this.polygonDraw.setActive(true);
+    }
+
+
+    edit(event: Event, type) {
+        event.stopPropagation();
+        this.clearInteraction()
+        this.polygonSelect.setActive(true);
+        this.polygonModify.setActive(true);
     }
 
     /**

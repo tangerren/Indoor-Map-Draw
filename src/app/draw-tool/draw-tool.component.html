@@ -1,14 +1,13 @@
 <div class="map-tools">
-	<button (click)="creat('mall')">新建Mall</button>
-	<button (click)="creat('floor')">新建Floor</button>
-	<button (click)="log()">打印当前日志</button>
-	<button (click)="draw('Rectangle')">画矩形</button>
-	<button (click)="draw('Circle')">画圆</button>
-	<button (click)="draw('Polygon')">画面</button>
-	<button (click)="save())">保存</button>
+	<button class="btn btn-primary" (click)="creat('mall')">新建Mall</button>
+	<button class="btn btn-secondary" (click)="creat('floor')">新建Floor</button>
+	<button class="btn btn-primary" (click)="edit($event)">编辑</button>
+	<button class="btn btn-warning" (click)="log()">打印当前日志</button>
+	<button class="btn btn-primary" (click)="draw($event,'Polygon')">画面</button>
+	<button class="btn btn-success" (click)="save()">保存</button>
 	<div style="background-color:bisque;width:200px;height:200px;">
 		<ul>
-			<li *ngFor="let item of drawnItems;let i = index;trackBy:_leaflet_id;let isFirst=first;">{{isFirst?'XX大厦':('第'+i+'层,id为'+item._leaflet_id)}}</li>
+			<li *ngFor="let item of features;let i = index;"> 第 {{i}}层</li>
 		</ul>
 	</div>
 </div>
