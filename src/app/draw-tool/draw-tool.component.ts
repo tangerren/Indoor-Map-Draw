@@ -1,9 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
-
 import { Map, interaction, layer, source, style, Feature, format } from 'openlayers';
 
-
-import { GeojsonService } from '../services/geojson.service';
+import { ModalDialogComponent } from '../modal-dialog/modal-dialog.component';
 
 @Component({
     selector: 'draw-tool',
@@ -13,6 +11,16 @@ import { GeojsonService } from '../services/geojson.service';
 export class DrawToolComponent implements OnInit {
 
     @Input() map: Map;
+
+    modalVisible = false;
+    warningModalVisible: boolean;
+    errInfo: string;
+    newMallDisable = false;
+
+    mall = {
+        name: '',
+        startFloor: ''
+    };
 
     private vectorLayer: layer.Vector;
     private polygonDraw: interaction.Draw;
@@ -24,6 +32,7 @@ export class DrawToolComponent implements OnInit {
     private formatGeojson = new format.GeoJSON();
 
     private layerSource = new source.Vector();
+
     private style = new style.Style({
         fill: new style.Fill({
             color: 'rgba(255, 255, 255, 0.2)'
@@ -43,7 +52,7 @@ export class DrawToolComponent implements OnInit {
         })
     });
 
-    constructor(private geojsonService: GeojsonService) { }
+    constructor() { }
 
     ngOnInit() {
         // 创建绘图图层
@@ -60,14 +69,6 @@ export class DrawToolComponent implements OnInit {
         // 添加绘图交互
         this.map.addInteraction(this.polygonDraw);
         this.polygonDraw.setActive(false);
-        // 添加捕捉功能
-        // The snap interaction must be added after the Modify and Draw interactions
-        // in order for its map browser event handlers to be fired first. Its handlers
-        // are responsible of doing the snapping.
-        const snap = new interaction.Snap({
-            source: this.vectorLayer.getSource()
-        });
-        this.map.addInteraction(snap);
         // 选中交互
         this.polygonSelect = new interaction.Select();
         this.map.addInteraction(this.polygonSelect);
@@ -83,6 +84,13 @@ export class DrawToolComponent implements OnInit {
         this.polygonSelect.on('change:active', function () {
             selectedFeatures.forEach(selectedFeatures.remove, selectedFeatures);
         });
+        // 添加捕捉功能，必须要在Draw和Modi之后添加
+        // The snap interaction must be added after the Modify and Draw interactions in order for its map browser event handlers to be fired first.
+        // Its handlers are responsible of doing the snapping.
+        const snap = new interaction.Snap({
+            source: this.layerSource
+        });
+        this.map.addInteraction(snap);
     }
 
     /**
@@ -90,9 +98,14 @@ export class DrawToolComponent implements OnInit {
      * @param type 绘制类型
      */
     creat(type) {
-        this.saveToCache(type);
-        this.clearInteraction();
-        this.polygonDraw.setActive(true);
+        if (type === 'mall') {
+            this.modalVisible = true;
+        }
+        const is = this.saveToCache(type);
+        if (is) {
+            this.clearInteraction();
+            this.polygonDraw.setActive(true);
+        }
     }
 
     private saveToCache(type?: string) {
@@ -111,23 +124,14 @@ export class DrawToolComponent implements OnInit {
                 }
             }
         } else {
-            console.log('请先创建Mall！');
-            return false;
+            if (type === 'floor') {
+                this.warningModalVisible = true;
+                this.errInfo = "请先创建Mall！";
+                console.log('请先创建Mall！');
+                return false;
+            }
         }
-    }
-
-    // log st.
-    log() {
-        console.log(this.vectorLayer);
-        console.log(this.layerSource);
-        console.log('%c 当前图层中的要素：', 'color:green;font-weight:bold;');
-        console.log(this.vectorLayer.getSource().getFeatures());
-        // geometry 只有图形要素，没有属性，属性在feature上
-        this.vectorLayer.getSource().getFeatures()[0].setProperties({ type: 'mall', id: '1s3334' });
-        this.vectorLayer.getSource().getFeatures()[0].getGeometry().setProperties({ name: 'test', id: '1s3334' });
-        console.log('%c 当前缓存中的要素：', 'color:green;font-weight:bold;');
-        console.log(this.features);
-        console.log(this.formatGeojson.writeFeatures(this.features[0]));
+        return true;
     }
 
     draw(event: Event, type) {
@@ -136,7 +140,7 @@ export class DrawToolComponent implements OnInit {
         this.polygonDraw.setActive(true);
     }
 
-    edit(event: Event, type) {
+    edit(event: Event) {
         event.stopPropagation();
         this.clearInteraction();
         this.polygonSelect.setActive(true);
@@ -148,7 +152,7 @@ export class DrawToolComponent implements OnInit {
         // 保存之前，把所有的floor都保存到临时缓存图层中,所以vectorLayer只有一个feature
         this.saveToCache('floor');
         // mall
-        features[0] = this.vectorLayer.getSource().getFeatures()[0];
+        features[0] = this.layerSource.getFeatures()[0];
         features[0].setProperties({ type: 'mall', id: this.randomString(32) });
         // floors
         this.features.forEach((item) => {
@@ -158,6 +162,32 @@ export class DrawToolComponent implements OnInit {
         console.log(geojson);
 
         this.createAndDownloadFile('geo.json', geojson);
+    }
+
+    modalHidden(event) {
+        if (event.result === 'cancle') {
+            this.modalVisible = false;
+            this.clearInteraction();
+        } else {
+            if (this.mall.name === '' || this.mall.startFloor === '') {
+                return;
+            }
+            this.newMallDisable = true;
+        }
+    }
+
+    // log st.
+    log() {
+        console.log(this.vectorLayer);
+        console.log(this.layerSource);
+        console.log('%c 当前图层中的要素：', 'color:green;font-weight:bold;');
+        console.log(this.vectorLayer.getSource().getFeatures());
+        // geometry 只有图形要素，没有属性，属性在feature上
+        this.layerSource.getFeatures()[0].setProperties({ type: 'mall', id: '1s3334' });
+        this.layerSource.getFeatures()[0].getGeometry().setProperties({ name: 'test', id: '1s3334' });
+        console.log('%c 当前缓存中的要素：', 'color:green;font-weight:bold;');
+        console.log(this.features);
+        console.log(this.formatGeojson.writeFeatures(this.features[0]));
     }
 
     private createAndDownloadFile(fileName, content) {
