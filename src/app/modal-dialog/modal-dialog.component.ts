@@ -8,8 +8,7 @@ import { Component, OnInit, Input, ContentChild, TemplateRef, Output, EventEmitt
 export class ModalDialogComponent implements OnInit {
 
   @Input() title: string;
-  @Input() visible: any;
-  @Output() hideModal = new EventEmitter();
+  @Output() modalHidden = new EventEmitter();
 
   @ContentChild('header') headerTmp: TemplateRef<any>;
   @ContentChild('content') contentTmp: TemplateRef<any>;
@@ -21,16 +20,12 @@ export class ModalDialogComponent implements OnInit {
   }
 
   cancle() {
-    this.visible = false;
-    this.hideModal.emit(this.visible);
+    this.modalHidden.emit({ result: 'cancle' });
     console.log("取消模态框内容！");
   }
 
   ok() {
-    this.visible = false;
-    this.hideModal.emit(this.visible);
+    this.modalHidden.emit({ result: 'ok' });
     console.log("确认模态框内容！");
   }
-
-
 }
