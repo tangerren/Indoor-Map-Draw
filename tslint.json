@@ -12,7 +12,7 @@
     ],
     "curly": [
       true,
-      "as-needed"
+      "ignore-same-line"
     ],
     "deprecation": {
       "severity": "warn"
