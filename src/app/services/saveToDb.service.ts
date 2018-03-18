@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
  * Layer和geojson之间相互转换
  */
 @Injectable()
-export class GeojsonService {
+export class SaveToDbService {
 
   constructor() { }
 
