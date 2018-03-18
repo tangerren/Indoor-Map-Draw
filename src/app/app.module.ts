@@ -4,18 +4,22 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { DrawToolComponent } from './draw-tool/draw-tool.component';
-import { GeojsonService } from './services/geojson.service';
+import { SaveToDbService } from './services/saveToDb.service';
+import { FloorComponent } from './floor/floor.component';
+import { ModalDialogComponent } from './modal-dialog/modal-dialog.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    DrawToolComponent
+    DrawToolComponent,
+    FloorComponent,
+    ModalDialogComponent
   ],
   imports: [
     BrowserModule
   ],
-  providers: [GeojsonService],
+  providers: [SaveToDbService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -11,7 +11,6 @@ import { DrawToolComponent } from './draw-tool/draw-tool.component';
 })
 
 
-
 export class AppComponent implements OnInit {
 
   map: any;
