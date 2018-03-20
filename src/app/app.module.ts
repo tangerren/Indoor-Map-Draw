@@ -8,6 +8,7 @@ import { DrawToolComponent } from './draw-tool/draw-tool.component';
 import { SaveToDbService } from './services/saveToDb.service';
 import { FloorComponent } from './floor/floor.component';
 import { ModalDialogComponent } from './modal-dialog/modal-dialog.component';
+import { PropertiesComponent } from './properties/properties.component';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { ModalDialogComponent } from './modal-dialog/modal-dialog.component';
     AppComponent,
     DrawToolComponent,
     FloorComponent,
-    ModalDialogComponent
+    ModalDialogComponent,
+    PropertiesComponent
   ],
   imports: [
     BrowserModule, FormsModule
