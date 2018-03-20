@@ -9,29 +9,35 @@ import { ModalDialogComponent } from '../modal-dialog/modal-dialog.component';
     styleUrls: ['./draw-tool.component.css']
 })
 export class DrawToolComponent implements OnInit {
-
     @Input() map: Map;
-
+    // 输入内容验证结果提示信息
+    validInfo = '';
+    // 模态框是否可见
     modalVisible = false;
+    // 提示框是否可见
     warningModalVisible: boolean;
+    // 全局报错信息
     errInfo: string;
+    // 按钮是否可用
     newMallDisable = false;
 
+    // 建筑物属性
     mall = {
         name: '',
-        startFloor: ''
+        startFloor: 1
     };
 
+    // 当前绘图的图层，用于绘制内容和编辑
+    private layerSource = new source.Vector();
     private vectorLayer: layer.Vector;
+    // 绘制和选中、编辑面
     private polygonDraw: interaction.Draw;
     private polygonModify: interaction.Modify;
     private polygonSelect: interaction.Select;
+    // 缓存要素数组，每一层楼的要素临时存放位置
     private features: Feature[][] = [];
-    private properties: Object[];
 
     private formatGeojson = new format.GeoJSON();
-
-    private layerSource = new source.Vector();
 
     private style = new style.Style({
         fill: new style.Fill({
@@ -94,7 +100,7 @@ export class DrawToolComponent implements OnInit {
     }
 
     /**
-     * 建筑物轮廓存在vectorLayer中，其他的楼层存放在feature数组中
+     * 创建MALL或者Floor
      * @param type 绘制类型
      */
     creat(type) {
@@ -108,9 +114,15 @@ export class DrawToolComponent implements OnInit {
         }
     }
 
+    /**
+     * 把当前绘制的内容存到缓存要素数组中
+     * @param type 当前绘制的类型
+     */
     private saveToCache(type?: string) {
         const layerCurrentFeatures = this.layerSource.getFeatures();
+        // 要创建floor，必须已经创建了mall，也即vector中要至少有一个要素
         if (type === 'floor' && layerCurrentFeatures.length > 0) {
+            // 已经绘制了mall
             const floorIndex = this.features.length;
             // 如果当前绘制楼层为空，则不允许绘制新的楼层
             if (type === 'floor' && layerCurrentFeatures.length !== 1) {
@@ -141,12 +153,16 @@ export class DrawToolComponent implements OnInit {
     }
 
     edit(event: Event) {
+        // 不能编辑Mall对应的要素，因为编辑之后，要素顺序会改变
         event.stopPropagation();
         this.clearInteraction();
         this.polygonSelect.setActive(true);
         this.polygonModify.setActive(true);
     }
 
+    /**
+     * 保存当前图层为geojson
+     */
     save() {
         let features: Feature[] = [];
         // 保存之前，把所有的floor都保存到临时缓存图层中,所以vectorLayer只有一个feature
@@ -164,16 +180,24 @@ export class DrawToolComponent implements OnInit {
         this.createAndDownloadFile('geo.json', geojson);
     }
 
+    // 模态框关闭事件
     modalHidden(event) {
         if (event.result === 'cancle') {
-            this.modalVisible = false;
             this.clearInteraction();
         } else {
-            if (this.mall.name === '' || this.mall.startFloor === '') {
+            if (this.mall.name.trim() === '' || this.mall.startFloor.toString().trim() === '') {
+                this.validInfo = "请输入楼宇名称和最低楼层！";
                 return;
             }
+            this.mall.startFloor = parseInt(this.mall.startFloor.toString().trim(), 0);
+            if (isNaN(this.mall.startFloor)) {
+                this.validInfo = "请输入正确的楼层数！";
+                return;
+            }
+            this.validInfo = "";
             this.newMallDisable = true;
         }
+        this.modalVisible = false;
     }
 
     // log st.
@@ -190,6 +214,13 @@ export class DrawToolComponent implements OnInit {
         console.log(this.formatGeojson.writeFeatures(this.features[0]));
     }
 
+    private clearInteraction() {
+        this.polygonSelect.setActive(false);
+        this.polygonModify.setActive(false);
+        this.polygonDraw.setActive(false);
+    }
+
+    // 下载文件
     private createAndDownloadFile(fileName, content) {
         const aTag = document.createElement('a');
         const blob = new Blob([content]);
@@ -197,12 +228,6 @@ export class DrawToolComponent implements OnInit {
         aTag.href = URL.createObjectURL(blob);
         aTag.click();
         URL.revokeObjectURL(aTag.href);
-    }
-
-    private clearInteraction() {
-        this.polygonSelect.setActive(false);
-        this.polygonModify.setActive(false);
-        this.polygonDraw.setActive(false);
     }
 
     /**

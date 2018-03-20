@@ -38,5 +38,9 @@
 			<label for="formGroupExampleInput2">最低楼层数</label>
 			<input type="text" class="form-control" [(ngModel)]="mall.startFloor" required placeholder="例如：-2">
 		</fieldset>
+		<div *ngIf="validInfo!=''">
+			<span class="badge badge-warning">提示</span>
+			{{validInfo}}
+		</div>
 	</ng-template>
 </modal-dialog>
