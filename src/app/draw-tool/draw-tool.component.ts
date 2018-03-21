@@ -1,7 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Map, interaction, layer, source, style, Feature, format } from 'openlayers';
 
 import { ModalDialogComponent } from '../modal-dialog/modal-dialog.component';
+import { RoomPropertiesComponent } from '../room-properties/room-properties.component';
 
 @Component({
     selector: 'draw-tool',
@@ -9,13 +10,19 @@ import { ModalDialogComponent } from '../modal-dialog/modal-dialog.component';
     styleUrls: ['./draw-tool.component.css']
 })
 export class DrawToolComponent implements OnInit {
+
     @Input() map: Map;
+    @ViewChild('roomProp')
+    roomProp: RoomPropertiesComponent;
+
     // 输入内容验证结果提示信息
     validInfo = '';
+    validRoomInfo = '';
     // 模态框是否可见
     modalVisible = false;
     // 提示框是否可见
     warningModalVisible: boolean;
+    roomModalVisible: boolean;
     // 全局报错信息
     errInfo: string;
     // 按钮是否可用
@@ -25,6 +32,16 @@ export class DrawToolComponent implements OnInit {
     mall = {
         name: '',
         startFloor: 1
+    };
+
+    // 房间属性
+    properties = {
+        id: '3sds4sfpcjtbslf8bmhiebhri4', // 唯一标识
+        name: '', // 名称
+        floor: 2, // 所在楼层
+        type: 'sm', // 房间类型
+        pName: '张无忌', // 联系人姓名
+        pTel: '15333333333' // 联系人电话
     };
 
     // 当前绘图的图层，用于绘制内容和编辑
@@ -198,6 +215,29 @@ export class DrawToolComponent implements OnInit {
             this.newMallDisable = true;
         }
         this.modalVisible = false;
+    }
+
+    roomModalHidden(event) {
+        if (event.result === 'ok') {
+            this.validRoomInfo = this.roomProp.validate();
+            if (!this.validRoomInfo) {
+                return;
+            } else {
+                this.roomProp.saveInfo();
+            }
+        }
+        // this.clearInteraction();
+        this.roomModalVisible = false;
+    }
+
+    writeRoomProp() {
+        this.clearInteraction();
+        this.polygonSelect.setActive(true);
+        this.polygonSelect.on('select', (e) => {
+            // e.selected[0].getProperties().id;
+            console.log(e);
+            this.roomModalVisible = true;
+        });
     }
 
     // log st.

@@ -3,6 +3,7 @@
 	<button class="btn btn-secondary" [disabled]="!newMallDisable" (click)="creat('floor')">新建楼层</button>
 	<button class="btn btn-primary" [disabled]="!newMallDisable" (click)="edit($event)">编辑</button>
 	<button class="btn btn-primary" [disabled]="!newMallDisable" (click)="draw($event,'Polygon')">画面</button>
+	<button class="btn btn-primary" [disabled]="!newMallDisable" (click)="writeRoomProp($event)">赋属性</button>
 	<button class="btn btn-success" [disabled]="!newMallDisable" (click)="save()">保存</button>
 	<button class="btn btn-warning" (click)="log()">打印当前数据</button>
 	<div style="background-color:bisque;width:200px;height:200px;">
@@ -41,6 +42,16 @@
 		<div *ngIf="validInfo!=''">
 			<span class="badge badge-warning">提示</span>
 			{{validInfo}}
+		</div>
+	</ng-template>
+</modal-dialog>
+<!-- Mall & Floor -->
+<modal-dialog [title]="'房间信息'" *ngIf="roomModalVisible" (modalHidden)="roomModalHidden($event)">
+	<ng-template #content>
+		<room-properties [properties]="properties" #roomProp></room-properties>
+		<div *ngIf="validRoomInfo!=''">
+			<span class="badge badge-warning">提示</span>
+			{{validRoomInfo}}
 		</div>
 	</ng-template>
 </modal-dialog>
