@@ -1,16 +1,11 @@
 <div class="map-tools">
 	<button class="btn btn-primary" [disabled]="newMallDisable" (click)="creat('mall')">新建楼宇</button>
-	<button class="btn btn-secondary" [disabled]="!newMallDisable" (click)="creat('floor')">新建楼层</button>
 	<button class="btn btn-primary" [disabled]="!newMallDisable" (click)="edit($event)">编辑</button>
 	<button class="btn btn-primary" [disabled]="!newMallDisable" (click)="draw($event,'Polygon')">画面</button>
 	<button class="btn btn-primary" [disabled]="!newMallDisable" (click)="writeRoomProp($event)">赋属性</button>
 	<button class="btn btn-success" [disabled]="!newMallDisable" (click)="save()">保存</button>
 	<button class="btn btn-warning" (click)="log()">打印当前数据</button>
-	<div style="background-color:bisque;width:200px;height:200px;">
-		<ul>
-			<li *ngFor="let item of features;let i = index;"> 第 {{i}}层</li>
-		</ul>
-	</div>
+	<floor [floors]="floors" (addFloor)="creat('floor')"></floor>
 </div>
 <!-- Waring -->
 <modal-dialog *ngIf="warningModalVisible">
@@ -39,6 +34,16 @@
 			<label for="formGroupExampleInput2">最低楼层数</label>
 			<input type="text" class="form-control" [(ngModel)]="mall.startFloor" required placeholder="例如：-2">
 		</fieldset>
+
+		<label for="formGroupExampleInput2">层高</label>
+		<div class="input-group">
+			<input type="text" class="form-control" [(ngModel)]="mall.floorHeight" required placeholder="例如：4">
+			<div class="input-group-append">
+				<span class="input-group-text">米</span>
+			</div>
+		</div>
+
+
 		<div *ngIf="validInfo!=''">
 			<span class="badge badge-warning">提示</span>
 			{{validInfo}}
@@ -48,7 +53,7 @@
 <!-- Mall & Floor -->
 <modal-dialog [title]="'房间信息'" *ngIf="roomModalVisible" (modalHidden)="roomModalHidden($event)">
 	<ng-template #content>
-		<room-properties [properties]="properties" #roomProp></room-properties>
+		<room-properties [properties]="roomProperties" #roomProp></room-properties>
 		<div *ngIf="validRoomInfo!=''">
 			<span class="badge badge-warning">提示</span>
 			{{validRoomInfo}}

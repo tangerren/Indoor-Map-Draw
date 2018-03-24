@@ -3,6 +3,7 @@ import { Map, interaction, layer, source, style, Feature, format } from 'openlay
 
 import { ModalDialogComponent } from '../modal-dialog/modal-dialog.component';
 import { RoomPropertiesComponent } from '../room-properties/room-properties.component';
+import { FloorComponent } from '../floor/floor.component';
 
 @Component({
     selector: 'draw-tool',
@@ -12,6 +13,7 @@ import { RoomPropertiesComponent } from '../room-properties/room-properties.comp
 export class DrawToolComponent implements OnInit {
 
     @Input() map: Map;
+
     @ViewChild('roomProp')
     roomProp: RoomPropertiesComponent;
 
@@ -27,15 +29,19 @@ export class DrawToolComponent implements OnInit {
     errInfo: string;
     // 按钮是否可用
     newMallDisable = false;
+    // 当前正在展示或绘制的楼层
+    currentFloor: number;
+    floors = [];
 
     // 建筑物属性
     mall = {
+        id: '',
         name: '',
         startFloor: 1
     };
 
     // 房间属性
-    properties = {
+    roomProperties = {
         id: '3sds4sfpcjtbslf8bmhiebhri4', // 唯一标识
         name: '', // 名称
         floor: 2, // 所在楼层
@@ -89,6 +95,20 @@ export class DrawToolComponent implements OnInit {
             source: this.layerSource,
             type: 'Polygon'
         });
+        //   在绘制结束后添加属性 drawend 事件
+        this.polygonDraw.on('drawend', (e: interaction.Draw.Event) => {
+            let prop = null;
+            // 绘制结束后，判断当前楼层，如果是0层，则表示是建筑物轮廓
+            if (!this.currentFloor) {
+                // 当前绘制或展示的是mall轮廓
+                this.creat('floor');
+                prop = { floor: 0, id: this.randomString(32) };
+            } else {
+                // 绘制的是floor
+                prop = { id: this.randomString(32), floor: this.currentFloor };
+            }
+            e.feature.setProperties(prop);
+        });
         // 添加绘图交互
         this.map.addInteraction(this.polygonDraw);
         this.polygonDraw.setActive(false);
@@ -123,44 +143,53 @@ export class DrawToolComponent implements OnInit {
     creat(type) {
         if (type === 'mall') {
             this.modalVisible = true;
+            this.currentFloor = 0;
+        } else if (isNaN(this.currentFloor)) {
+            this.warningModalVisible = true;
+            this.errInfo = "请先创建Mall！";
+            console.log('请先创建Mall！');
+            return false;
+        } else if (this.layerSource.getFeatures().length === 1) {
+            // 如果当前绘制楼层为空，则不允许绘制新的楼层
+            this.warningModalVisible = true;
+            this.errInfo = "当前楼层为空，请在当前楼层中绘制！";
+            console.log('当前楼层为空，请在当前楼层中绘制！');
+            return false;
+        } else {
+            if (this.currentFloor === 0) {
+                this.currentFloor = this.mall.startFloor;
+            } else {
+                // 如果是从负楼层开始，则跳过0层（mall）
+                if (this.currentFloor++ === 0) {
+                    this.currentFloor++;
+                }
+            }
+            // TODO  最大楼层检测
+            this.floors.push(this.currentFloor);
+            this.saveToCache();
         }
-        const is = this.saveToCache(type);
-        if (is) {
-            this.clearInteraction();
-            this.polygonDraw.setActive(true);
-        }
+        this.clearInteraction();
+        this.polygonDraw.setActive(true);
     }
 
     /**
-     * 把当前绘制的内容存到缓存要素数组中
+     * 新建楼层时候，把上一步绘制的floor缓存到缓存要素数组中
      * @param type 当前绘制的类型
      */
-    private saveToCache(type?: string) {
+    private saveToCache() {
         const layerCurrentFeatures = this.layerSource.getFeatures();
         // 要创建floor，必须已经创建了mall，也即vector中要至少有一个要素
-        if (type === 'floor' && layerCurrentFeatures.length > 0) {
+        if (layerCurrentFeatures.length > 0) {
             // 已经绘制了mall
             const floorIndex = this.features.length;
-            // 如果当前绘制楼层为空，则不允许绘制新的楼层
-            if (type === 'floor' && layerCurrentFeatures.length !== 1) {
-                // 如果是新建Floor，则把上次绘制的Floor放到临时缓存图层数组中
-                // 除去第一个要素（Mall的轮廓）之外的就是上一层Floor的要素
-                this.features[floorIndex] = layerCurrentFeatures.slice(1);
-                for (let i = 0; i < this.features[floorIndex].length; i++) {
-                    const element = this.features[floorIndex][i];
-                    element.setProperties({ id: this.randomString(32), floor: floorIndex });
-                    this.layerSource.removeFeature(element);
-                }
-            }
-        } else {
-            if (type === 'floor') {
-                this.warningModalVisible = true;
-                this.errInfo = "请先创建Mall！";
-                console.log('请先创建Mall！');
-                return false;
+            // 如果是新建Floor，则把上次绘制的Floor放到临时缓存图层数组中
+            // 除去第一个要素（Mall的轮廓）之外的就是上一层Floor的要素
+            this.features[floorIndex] = layerCurrentFeatures.slice(1);
+            for (let i = 0; i < this.features[floorIndex].length; i++) {
+                const element = this.features[floorIndex][i];
+                this.layerSource.removeFeature(element);
             }
         }
-        return true;
     }
 
     draw(event: Event, type) {
@@ -181,19 +210,20 @@ export class DrawToolComponent implements OnInit {
      * 保存当前图层为geojson
      */
     save() {
-        let features: Feature[] = [];
+        let saveFeatures: Feature[] = [];
         // 保存之前，把所有的floor都保存到临时缓存图层中,所以vectorLayer只有一个feature
-        this.saveToCache('floor');
+        if (this.layerSource.getFeatures().length === 1) {
+            this.saveToCache();
+        }
         // mall
-        features[0] = this.layerSource.getFeatures()[0];
-        features[0].setProperties({ type: 'mall', id: this.randomString(32) });
+        saveFeatures[0] = this.layerSource.getFeatures()[0];
         // floors
         this.features.forEach((item) => {
-            features = features.concat(item);
+            saveFeatures = saveFeatures.concat(item);
         });
-        const geojson = this.formatGeojson.writeFeatures(features);
+        // export
+        const geojson = this.formatGeojson.writeFeatures(saveFeatures);
         console.log(geojson);
-
         this.createAndDownloadFile('geo.json', geojson);
     }
 
@@ -230,12 +260,12 @@ export class DrawToolComponent implements OnInit {
         this.roomModalVisible = false;
     }
 
+    // 赋属性
     writeRoomProp() {
         this.clearInteraction();
         this.polygonSelect.setActive(true);
-        this.polygonSelect.on('select', (e) => {
-            // e.selected[0].getProperties().id;
-            console.log(e);
+        this.polygonSelect.on('select', (e: interaction.Select.Event) => {
+            this.roomProperties.id = e.selected[0].getProperties().id;
             this.roomModalVisible = true;
         });
     }
@@ -258,6 +288,7 @@ export class DrawToolComponent implements OnInit {
         this.polygonSelect.setActive(false);
         this.polygonModify.setActive(false);
         this.polygonDraw.setActive(false);
+        this.polygonSelect.un('select', null);
     }
 
     // 下载文件
