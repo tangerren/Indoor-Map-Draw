@@ -6,3 +6,12 @@ body {
 	height: 100%;
 	margin: 0px;
 }
+
+
+.position-lable {
+	position: fixed;
+	z-index: 999;
+	bottom: 10px;
+	background-color: #999;
+	left: 10px;
+}
