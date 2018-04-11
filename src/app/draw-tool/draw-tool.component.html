@@ -31,10 +31,13 @@
 			<input type="text" class="form-control" [(ngModel)]="mall.name" required placeholder="例如：光华大厦">
 		</fieldset>
 		<fieldset class="form-group">
+			<label for="formGroupExampleInput2">总层数</label>
+			<input type="text" class="form-control" [(ngModel)]="mall.floors" required placeholder="例如：1">
+		</fieldset>
+		<fieldset class="form-group">
 			<label for="formGroupExampleInput2">最低楼层数</label>
 			<input type="text" class="form-control" [(ngModel)]="mall.startFloor" required placeholder="例如：-2">
 		</fieldset>
-
 		<label for="formGroupExampleInput2">层高</label>
 		<div class="input-group">
 			<input type="text" class="form-control" [(ngModel)]="mall.floorHeight" required placeholder="例如：4">

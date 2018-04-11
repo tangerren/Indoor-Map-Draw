@@ -37,6 +37,7 @@ export class DrawToolComponent implements OnInit {
     mall = {
         id: '',
         name: '',
+        floors: 1,
         startFloor: 1
     };
 
@@ -102,7 +103,8 @@ export class DrawToolComponent implements OnInit {
             if (!this.currentFloor) {
                 // 当前绘制或展示的是mall轮廓
                 this.creat('floor');
-                prop = { floor: 0, id: this.randomString(32) };
+                // TODO  使用turf计算中心点
+                prop = { id: this.randomString(32), floor: 0, floors: this.mall.floors, center: [0, 0] };
             } else {
                 // 绘制的是floor
                 prop = { id: this.randomString(32), floor: this.currentFloor };
