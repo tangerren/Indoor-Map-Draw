@@ -4,6 +4,9 @@ import { Map, View, layer, source, proj, style, Feature, geom, control } from 'o
 
 import { DrawToolComponent } from './draw-tool/draw-tool.component';
 
+import { PolygonSlice } from '../utils/split-polygon';
+import { polygon, lineString, lineToPolygon } from '@turf/turf';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -20,7 +23,33 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.createMap();
+    this.testSplitPolygon();
   }
+
+
+  testSplitPolygon() {
+    let mian = polygon([[
+      [0, 0],
+      [0, 10],
+      [10, 10],
+      [10, 0],
+      [0, 0]
+    ]]);
+    let xian = lineString([
+      [5, 15],
+      [5, -15]
+    ]);
+    let sP = new PolygonSlice();
+    let splied = sP.slice(mian, xian);
+
+    for (let i = 0; i < splied.features.length; i++) {
+      const element = splied.features[i];
+      if (element.geometry.coordinates.length >= 3) {
+        console.log(lineToPolygon(element));
+      }
+    }
+  }
+
 
   private createMap() {
 
