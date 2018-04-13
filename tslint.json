@@ -86,7 +86,7 @@
       "check-else",
       "check-whitespace"
     ],
-    "prefer-const": true,
+    "prefer-const": false,
     "radix": true,
     "semicolon": [
       true,
