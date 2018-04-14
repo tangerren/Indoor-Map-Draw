@@ -1,5 +1,5 @@
 import {
-    helpers, lineSplit, getCoords, featureEach,
+    helpers, lineSplit, getCoords, featureEach, lineToPolygon,
 } from '@turf/turf';
 
 import { Feature, Polygon, LineString, lineString, featureCollection, FeatureCollection, feature, Geometry } from '@turf/helpers';
@@ -56,6 +56,18 @@ export class PolygonSlice {
         });
 
         return featureCollection(results);
+    }
+
+    split(poly: Feature<Polygon>, splitter: Feature<LineString>): Feature<Polygon>[] {
+        let splied = this.slice(poly, splitter);
+        let polygons = [];
+        for (let i = 0; i < splied.features.length; i++) {
+            const element = splied.features[i];
+            if (element.geometry.coordinates.length >= 3) {
+                polygons.push(lineToPolygon(element));
+            }
+        }
+        return polygons;
     }
 
     // feature to featureCollection

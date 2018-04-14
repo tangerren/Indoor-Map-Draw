@@ -5,7 +5,7 @@ import { Map, View, layer, source, proj, style, Feature, geom, control } from 'o
 import { DrawToolComponent } from './draw-tool/draw-tool.component';
 
 import { PolygonSlice } from '../utils/split-polygon';
-import { polygon, lineString, lineToPolygon } from '@turf/turf';
+import { polygon, lineString } from '@turf/turf';
 
 @Component({
   selector: 'app-root',
@@ -40,14 +40,8 @@ export class AppComponent implements OnInit {
       [5, -15]
     ]);
     let sP = new PolygonSlice();
-    let splied = sP.slice(mian, xian);
-
-    for (let i = 0; i < splied.features.length; i++) {
-      const element = splied.features[i];
-      if (element.geometry.coordinates.length >= 3) {
-        console.log(lineToPolygon(element));
-      }
-    }
+    let splited = sP.split(mian, xian);
+    console.log(splited);
   }
 
 
