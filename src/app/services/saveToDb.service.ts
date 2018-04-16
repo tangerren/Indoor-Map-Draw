@@ -8,7 +8,7 @@ export class SaveToDbService {
 
   constructor() { }
 
-  // TODO
+  // TODO:
   /**
    * 根据当前MALL对应的layergroup数组，生成组合GeoJSON
    */
