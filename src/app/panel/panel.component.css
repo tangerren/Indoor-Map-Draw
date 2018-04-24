@@ -1,0 +1,16 @@
+.proj-panel {
+	width: 200px;
+	height: 200px;
+	float: left;
+	margin: 20px 15px;
+	padding: 5px;
+	box-shadow: 4px 4px 15px 5px #888888;
+}
+
+.proj-name {}
+
+.proj-date {}
+
+.proj-creator {}
+
+.proj-address {}

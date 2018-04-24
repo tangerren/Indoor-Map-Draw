@@ -9,6 +9,8 @@ import { SaveToDbService } from './services/saveToDb.service';
 import { FloorComponent } from './floor/floor.component';
 import { ModalDialogComponent } from './modal-dialog/modal-dialog.component';
 import { RoomPropertiesComponent } from './room-properties/room-properties.component';
+import { PanelComponent } from './panel/panel.component';
+import { MapComponent } from './map/map.component';
 
 
 @NgModule({
@@ -17,7 +19,9 @@ import { RoomPropertiesComponent } from './room-properties/room-properties.compo
     DrawToolComponent,
     FloorComponent,
     ModalDialogComponent,
-    RoomPropertiesComponent
+    RoomPropertiesComponent,
+    PanelComponent,
+    MapComponent
   ],
   imports: [
     BrowserModule, FormsModule

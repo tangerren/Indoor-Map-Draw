@@ -1,0 +1,38 @@
+<div>
+  <button>新建</button>
+  <div *ngFor="let proj of projs" class="proj-panel">
+    <div class="proj-name">{{proj.name}}</div>
+    <div class="proj-date">{{proj.date}}</div>
+    <div class="proj-creator">{{proj.creator}}</div>
+    <div class="proj-address">{{proj.address}}</div>
+    <button>编辑</button>
+  </div>
+  <!-- Mall & Floor -->
+  <modal-dialog [title]="'楼宇信息'" *ngIf="modalVisible" (modalHidden)="modalHidden($event)">
+    <ng-template #content>
+      <fieldset class="form-group">
+        <label for="formGroupExampleInput">建筑物名称</label>
+        <input type="text" class="form-control" [(ngModel)]="mall.name" required placeholder="例如：光华大厦">
+      </fieldset>
+      <fieldset class="form-group">
+        <label for="formGroupExampleInput2">总层数</label>
+        <input type="text" class="form-control" [(ngModel)]="mall.floors" required placeholder="例如：1">
+      </fieldset>
+      <fieldset class="form-group">
+        <label for="formGroupExampleInput2">最低楼层数</label>
+        <input type="text" class="form-control" [(ngModel)]="mall.startFloor" required placeholder="例如：-2">
+      </fieldset>
+      <label for="formGroupExampleInput2">层高</label>
+      <div class="input-group">
+        <input type="text" class="form-control" [(ngModel)]="mall.floorHeight" required placeholder="例如：4">
+        <div class="input-group-append">
+          <span class="input-group-text">米</span>
+        </div>
+      </div>
+      <div *ngIf="validInfo!=''">
+        <span class="badge badge-warning">提示</span>
+        {{validInfo}}
+      </div>
+    </ng-template>
+  </modal-dialog>
+</div>
