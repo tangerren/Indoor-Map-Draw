@@ -1,6 +1,7 @@
 <div class="map-tools">
 	<button class="btn btn-primary" [disabled]="newMallDisable" (click)="creat('mall')">新建楼宇</button>
 	<button class="btn btn-primary" [disabled]="!newMallDisable" (click)="edit($event)">编辑</button>
+	<!-- <button class="btn btn-primary" [disabled]="!newMallDisable" (click)="drawClipLine($event)">分割</button> -->
 	<button class="btn btn-primary" [disabled]="!newMallDisable" (click)="draw($event,'Polygon')">画面</button>
 	<button class="btn btn-primary" [disabled]="!newMallDisable" (click)="writeRoomProp($event)">赋属性</button>
 	<button class="btn btn-success" [disabled]="!newMallDisable" (click)="save()">保存</button>

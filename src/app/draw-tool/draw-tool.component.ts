@@ -4,6 +4,8 @@ import { Map, interaction, layer, source, style, Feature, format } from 'openlay
 import { ModalDialogComponent } from '../modal-dialog/modal-dialog.component';
 import { RoomPropertiesComponent } from '../room-properties/room-properties.component';
 import { FloorComponent } from '../floor/floor.component';
+import { PolygonSlice } from '../../utils/split-polygon';
+import { lineString } from '@turf/turf';
 
 @Component({
     selector: 'draw-tool',
@@ -12,6 +14,7 @@ import { FloorComponent } from '../floor/floor.component';
 })
 export class DrawToolComponent implements OnInit {
 
+    polyLineDraw: interaction.Draw;
     @Input() map: Map;
 
     @ViewChild('roomProp')
@@ -92,6 +95,29 @@ export class DrawToolComponent implements OnInit {
         });
         this.map.addLayer(this.vectorLayer);
         // 创建绘图要素
+        this.polyLineDraw = new interaction.Draw({
+            source: this.layerSource,
+            type: 'LineString'
+        });
+        //   在绘制结束后添加属性 drawend 事件
+        this.polyLineDraw.on('drawend', (e: interaction.Draw.Event) => {
+            let prop = null;
+            // 分割要素
+
+            let sP = new PolygonSlice();
+
+            console.log(this.polygonSelect.getFeatures[0]);
+
+            let eG: ol.geom.LineString = e.feature.getGeometry() as ol.geom.LineString;
+            let splited = sP.split(this.polygonSelect.getFeatures[0], lineString(eG.getCoordinates()));
+
+            console.log(splited);
+        });
+        this.map.addInteraction(this.polyLineDraw);
+        this.polyLineDraw.setActive(false);
+
+
+        // 创建绘图要素
         this.polygonDraw = new interaction.Draw({
             source: this.layerSource,
             type: 'Polygon'
@@ -117,7 +143,7 @@ export class DrawToolComponent implements OnInit {
         // 选中交互
         this.polygonSelect = new interaction.Select();
         this.map.addInteraction(this.polygonSelect);
-        this.polygonSelect.setActive(false);
+        // this.polygonSelect.setActive(false);
         // 选中之后编辑交互
         this.polygonModify = new interaction.Modify({
             features: this.polygonSelect.getFeatures()
@@ -208,6 +234,12 @@ export class DrawToolComponent implements OnInit {
         this.polygonModify.setActive(true);
     }
 
+    drawClipLine(event: Event, type) {
+        event.stopPropagation();
+        this.clearInteraction();
+        this.polyLineDraw.setActive(true);
+    }
+
     /**
      * 保存当前图层为geojson
      */
@@ -287,7 +319,7 @@ export class DrawToolComponent implements OnInit {
     }
 
     private clearInteraction() {
-        this.polygonSelect.setActive(false);
+        // this.polygonSelect.setActive(false);
         this.polygonModify.setActive(false);
         this.polygonDraw.setActive(false);
         this.polygonSelect.un('select', null);
