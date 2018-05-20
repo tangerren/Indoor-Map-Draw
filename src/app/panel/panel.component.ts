@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+
+import { ProjectModalComponent } from '../project-modal/project-modal.component';
+import { MallProp } from '../types/MallProp';
 
 @Component({
   selector: 'panel',
@@ -6,26 +9,60 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./panel.component.css']
 })
 export class PanelComponent implements OnInit {
+  newproj: MallProp = {
+    id: "",
+    name: "",
+    date: "",
+    creator: "",
+    address: "",
+    pName: "",
+    pTel: ""
+  };
 
-  projs = [{
+  projs: MallProp[] = [{
     name: "嘉华大厦",
     date: "2018-05-27",
     creator: "王丽",
-    address: "博古街36号"
+    address: "博古街36号",
+    id: "",
+    startFloor: 0,
+    endFloor: 0,
+    floors: 0,
+    pName: "王丽",
+    pTel: "15320283736"
   }, {
     name: "嘉华大厦2",
     date: "2018-09-26",
     creator: "张柏",
-    address: "博古街36号"
+    address: "博古街36号",
+    id: "",
+    startFloor: 0,
+    endFloor: 0,
+    floors: 0,
+    pName: "张柏",
+    pTel: "13623428767"
   }, {
     name: "嘉华大厦3",
     date: "2018-11-16",
     creator: "王小",
-    address: "博古街36号"
+    address: "博古街36号",
+    id: "",
+    startFloor: 0,
+    endFloor: 0,
+    floors: 0,
+    pName: "王小",
+    pTel: "15822328878"
   }];
+
+  isCollapsed = false;
+  triggerTemplate = null;
+  @ViewChild('trigger') customTrigger: TemplateRef<void>;
   constructor() { }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
+  /** custom trigger can be TemplateRef **/
+  changeTrigger(): void {
+    this.triggerTemplate = this.customTrigger;
+  }
 }

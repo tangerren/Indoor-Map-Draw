@@ -1,16 +1,25 @@
-.proj-panel {
-	width: 200px;
-	height: 200px;
-	float: left;
-	margin: 20px 15px;
-	padding: 5px;
-	box-shadow: 4px 4px 15px 5px #888888;
+:host ::ng-deep .trigger {
+  font-size: 18px;
+  line-height: 64px;
+  padding: 0 24px;
+  cursor: pointer;
+  transition: color .3s;
 }
 
-.proj-name {}
+:host ::ng-deep .trigger:hover {
+  color: #1890ff;
+}
 
-.proj-date {}
+:host ::ng-deep .logo {
+  height: 32px;
+  background: rgba(255, 255, 255, .2);
+  margin: 16px;
+}
 
-.proj-creator {}
-
-.proj-address {}
+.logo {
+  width: 120px;
+  height: 31px;
+  background: rgba(255, 255, 255, .2);
+  margin: 16px 28px 16px 0;
+  float: left;
+}
