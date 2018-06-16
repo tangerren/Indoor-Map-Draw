@@ -11,6 +11,13 @@ import { ModalDialogComponent } from './modal-dialog/modal-dialog.component';
 import { RoomPropertiesComponent } from './room-properties/room-properties.component';
 import { PanelComponent } from './panel/panel.component';
 import { MapComponent } from './map/map.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientModule } from '@angular/common/http';
+import { NgZorroAntdModule, NZ_I18N, zh_CN } from 'ng-zorro-antd';
+import { registerLocaleData } from '@angular/common';
+import zh from '@angular/common/locales/zh';
+
+registerLocaleData(zh);
 
 
 @NgModule({
@@ -24,9 +31,9 @@ import { MapComponent } from './map/map.component';
     MapComponent
   ],
   imports: [
-    BrowserModule, FormsModule
+    BrowserModule, FormsModule, BrowserAnimationsModule, HttpClientModule, NgZorroAntdModule
   ],
-  providers: [SaveToDbService],
+  providers: [SaveToDbService, { provide: NZ_I18N, useValue: zh_CN }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

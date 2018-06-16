@@ -1,6 +1,6 @@
 import { AppPage } from './app.po';
 
-describe('indoor-map-draw App', () => {
+describe('workspace-project App', () => {
   let page: AppPage;
 
   beforeEach(() => {
@@ -9,6 +9,6 @@ describe('indoor-map-draw App', () => {
 
   it('should display welcome message', () => {
     page.navigateTo();
-    expect(page.getParagraphText()).toEqual('Welcome to app!');
+    expect(page.getParagraphText()).toEqual('Welcome to Indoor-Map-Draw!');
   });
 });
