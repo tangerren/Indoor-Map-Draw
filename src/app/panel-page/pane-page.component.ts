@@ -1,14 +1,13 @@
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 
-import { ProjectModalComponent } from '../project-modal/project-modal.component';
 import { MallProp } from '../types/MallProp';
 
 @Component({
   selector: 'panel',
-  templateUrl: './panel.component.html',
-  styleUrls: ['./panel.component.css']
+  templateUrl: './panel-page.component.html',
+  styleUrls: ['./panel-page.component.css']
 })
-export class PanelComponent implements OnInit {
+export class PanelPageComponent implements OnInit {
   newproj: MallProp = {
     id: "",
     name: "",

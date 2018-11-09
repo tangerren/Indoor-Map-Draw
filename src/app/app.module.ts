@@ -9,7 +9,7 @@ import { SaveToDbService } from './services/saveToDb.service';
 import { FloorComponent } from './floor/floor.component';
 import { ModalDialogComponent } from './modal-dialog/modal-dialog.component';
 import { RoomPropertiesComponent } from './room-properties/room-properties.component';
-import { PanelComponent } from './panel/panel.component';
+import { PanelPageComponent } from './panel-page/pane-page.component';
 import { MapComponent } from './map/map.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
@@ -17,6 +17,7 @@ import { NgZorroAntdModule, NZ_I18N, zh_CN } from 'ng-zorro-antd';
 import { registerLocaleData } from '@angular/common';
 import zh from '@angular/common/locales/zh';
 import { ProjectModalComponent } from './project-modal/project-modal.component';
+import { EditPageComponent } from './edit-page/edit-page.component';
 
 registerLocaleData(zh);
 
@@ -28,9 +29,10 @@ registerLocaleData(zh);
     FloorComponent,
     ModalDialogComponent,
     RoomPropertiesComponent,
-    PanelComponent,
+    PanelPageComponent,
     MapComponent,
-    ProjectModalComponent
+    ProjectModalComponent,
+    EditPageComponent
   ],
   imports: [
     BrowserModule, FormsModule, BrowserAnimationsModule, HttpClientModule, ReactiveFormsModule,
