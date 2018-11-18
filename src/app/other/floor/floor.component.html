@@ -1,0 +1,7 @@
+<div>
+  <span>楼层：</span>
+  <button class="btn btn-praimary" (click)="floorAdd($event)">添加...</button>
+  <ul>
+    <li *ngFor="let floor of floors">{{floor}}层</li>
+  </ul>
+</div>

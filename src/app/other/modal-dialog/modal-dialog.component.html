@@ -1,0 +1,20 @@
+<div class="modal-container">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span *ngIf="!headerTmp">{{title}}</span>
+        <ng-template [ngTemplateOutlet]="headerTmp" *ngIf="headerTmp"></ng-template>
+      </div>
+
+      <div class="modal-body" *ngIf="contentTmp">
+        <ng-template [ngTemplateOutlet]="contentTmp"></ng-template>
+      </div>
+
+      <div class="modal-footer">
+        <ng-template [ngTemplateOutlet]="footerTmp" *ngIf="footerTmp"></ng-template>
+        <button type="button" class="btn btn-secondary" *ngIf="!footerTmp" (click)="cancle()">取消</button>
+        <button type="button" class="btn btn-primary" *ngIf="!footerTmp" (click)="ok()">确定</button>
+      </div>
+    </div>
+  </div>
+</div>

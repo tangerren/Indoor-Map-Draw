@@ -1,0 +1,32 @@
+<button nz-button [nzType]="'primary'" (click)="showModal()">
+  <span>{{lable}}</span>
+</button>
+<nz-modal [nzTitle]="title" [(nzVisible)]="modalVisible" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+
+  <form nz-form [formGroup]="mallForm">
+    <nz-form-item>
+      <nz-form-label [nzSpan]="5" nzRequired nzFor="name">建筑物名称</nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <input id="name" type="text" nz-input formControlName="name">
+        <nz-form-explain *ngIf="mallForm.get('name').dirty && mallForm.get('name').errors">Please input mall username!</nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSpan]="5" nzRequired nzFor="floors">总层数</nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <input id="floors" type="text" nz-input formControlName="floors">
+        <nz-form-explain *ngIf="mallForm.get('floors').dirty && mallForm.get('floors').errors">Please input mall floors!</nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSpan]="5" nzRequired nzFor="startFloor">最低楼层数</nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <input id="startFloor" type="text" nz-input formControlName="startFloor">
+        <nz-form-explain *ngIf="mallForm.get('startFloor').dirty && mallForm.get('startFloor').errors">Please input mall startFloor!</nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+
+  </form>
+</nz-modal>

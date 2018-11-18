@@ -1,0 +1,66 @@
+<div class="map-tools">
+	<button class="btn btn-primary" [disabled]="newMallDisable" (click)="creat('mall')">新建楼宇</button>
+	<button class="btn btn-primary" [disabled]="!newMallDisable" (click)="edit($event)">编辑</button>
+	<!-- <button class="btn btn-primary" [disabled]="!newMallDisable" (click)="drawClipLine($event)">分割</button> -->
+	<button class="btn btn-primary" [disabled]="!newMallDisable" (click)="draw($event,'Polygon')">画面</button>
+	<button class="btn btn-primary" [disabled]="!newMallDisable" (click)="writeRoomProp($event)">赋属性</button>
+	<button class="btn btn-success" [disabled]="!newMallDisable" (click)="save()">保存</button>
+	<button class="btn btn-warning" (click)="log()">打印当前数据</button>
+	<floor [floors]="floors" (addFloor)="creat('floor')"></floor>
+</div>
+<!-- Waring -->
+<modal-dialog *ngIf="warningModalVisible">
+	<ng-template #header>
+		<strong>
+			<span class="label label-danger">提示</span>
+		</strong>
+	</ng-template>
+	<ng-template #content>
+		<div class="alert alert-danger">
+			{{errInfo}}
+		</div>
+	</ng-template>
+	<ng-template #footer>
+		<button class="btn btn-primary" (click)="warningModalVisible=false">好的</button>
+	</ng-template>
+</modal-dialog>
+<!-- Mall & Floor -->
+<modal-dialog [title]="'楼宇信息'" *ngIf="modalVisible" (modalHidden)="modalHidden($event)">
+	<ng-template #content>
+		<fieldset class="form-group">
+			<label for="formGroupExampleInput">建筑物名称</label>
+			<input type="text" class="form-control" [(ngModel)]="mall.name" required placeholder="例如：光华大厦">
+		</fieldset>
+		<fieldset class="form-group">
+			<label for="formGroupExampleInput2">总层数</label>
+			<input type="text" class="form-control" [(ngModel)]="mall.floors" required placeholder="例如：1">
+		</fieldset>
+		<fieldset class="form-group">
+			<label for="formGroupExampleInput2">最低楼层数</label>
+			<input type="text" class="form-control" [(ngModel)]="mall.startFloor" required placeholder="例如：-2">
+		</fieldset>
+		<label for="formGroupExampleInput2">层高</label>
+		<div class="input-group">
+			<input type="text" class="form-control" [(ngModel)]="mall.floorHeight" required placeholder="例如：4">
+			<div class="input-group-append">
+				<span class="input-group-text">米</span>
+			</div>
+		</div>
+
+
+		<div *ngIf="validInfo!=''">
+			<span class="badge badge-warning">提示</span>
+			{{validInfo}}
+		</div>
+	</ng-template>
+</modal-dialog>
+<!-- Mall & Floor -->
+<modal-dialog [title]="'房间信息'" *ngIf="roomModalVisible" (modalHidden)="roomModalHidden($event)">
+	<ng-template #content>
+		<room-properties [properties]="roomProperties" #roomProp></room-properties>
+		<div *ngIf="validRoomInfo!=''">
+			<span class="badge badge-warning">提示</span>
+			{{validRoomInfo}}
+		</div>
+	</ng-template>
+</modal-dialog>
