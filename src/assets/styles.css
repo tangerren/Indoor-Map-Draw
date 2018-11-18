@@ -6,11 +6,18 @@ body {
 	margin: 0px;
 }
 
+.logo {
+	color: #ffffff;
+	width: 120px;
+	height: 31px;
+	background-size: 120px 31px;
+	background-image: url(Indoor.png);
+	margin: 8px 28px 16px 0;
+	float: left;
+}
 
-.position-lable {
-	position: fixed;
-	z-index: 999;
-	bottom: 10px;
-	background-color: #999;
-	left: 10px;
+.toggleTool {
+	cursor: pointer;
+	width: 36px;
+	font-size: 18px !important;
 }
