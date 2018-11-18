@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { MallProp } from '../../types/MallProp';
+import { Mall } from '../../types/Mall';
 
 @Component({
   selector: 'project-modal',
@@ -16,7 +16,7 @@ export class ProjectModalComponent implements OnInit {
 
   @Input() title: string;
   @Input() lable: string;
-  @Input() mall: MallProp;
+  @Input() mall: Mall;
 
   ngOnInit() {
     this.mallForm = this.fb.group({

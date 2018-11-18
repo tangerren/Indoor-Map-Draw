@@ -1,49 +1,18 @@
-<nz-layout style="width: 100%;height: 100%;">
-  <nz-sider nzCollapsible [(nzCollapsed)]="isCollapsed" [nzTrigger]="triggerTemplate">
-    <div class="logo">
-    </div>
-    <ul nz-menu [nzTheme]="'dark'" [nzMode]="'inline'" [nzInlineCollapsed]="isCollapsed">
-      <li nz-submenu>
-        <span title>
-          <i nz-icon type="user" theme="outline"></i>
-          <span class="nav-text">楼宇类型</span>
-        </span>
-        <ul>
-          <li nz-menu-item>商场</li>
-          <li nz-menu-item>菜市场</li>
-          <li nz-menu-item>写字楼</li>
-        </ul>
-      </li>
-    </ul>
-  </nz-sider>
-  <nz-layout>
-    <nz-header style="background: #fff; padding:0;">
-      <i nz-icon [type]="isCollapsed?'menu-unfold':'menu-fold'" (click)="toggleCollapsed()" style="margin-left:10px;"></i>
-      <div style="float: right;padding: 2px 20px;">
-        <nz-avatar nzIcon="anticon anticon-search" style="background-color:#87d068;"></nz-avatar>&nbsp;&nbsp;&nbsp;&nbsp;
-        <nz-avatar nzIcon="anticon anticon-bell" style="background-color:#87d068;"></nz-avatar>&nbsp;&nbsp;&nbsp;&nbsp;
-        <nz-avatar nzIcon="anticon anticon-user" style="background-color:#87d068;"></nz-avatar>&nbsp;&nbsp;
-        <span>张 三</span>
-      </div>
-    </nz-header>
-    <nz-content style="margin:0 16px;">
-      <nz-breadcrumb style="margin:16px 0;">
-        <nz-breadcrumb-item>楼宇类型</nz-breadcrumb-item>
-        <nz-breadcrumb-item>商场</nz-breadcrumb-item>
-      </nz-breadcrumb>
-      <div style="padding:24px; background: #fff;">
-        <!-- <project-modal title="新建楼宇" lable="新建" [mall]="newproj"></project-modal> -->
-        <nz-card style="width:300px;margin: 10px;" nzTitle="{{proj.name}}" *ngFor="let proj of projs">
-          <div class="proj-date">{{proj.date}}</div>
-          <div class="proj-creator">{{proj.creator}}</div>
-          <div class="proj-address">{{proj.address}}</div>
-          <!-- <project-modal title="编辑楼宇" lable="编辑" [mall]="proj"></project-modal> -->
-        </nz-card>
-      </div>
-    </nz-content>
-    <nz-footer style="text-align: center;">xxxxxxxxxxxxx</nz-footer>
-  </nz-layout>
-</nz-layout>
-<ng-template #trigger>
-  <i nz-icon type="up-square" theme="outline"></i>
-</ng-template>
+<div class="cardStyle">
+  <div *ngFor="let mall of malls">
+    <nz-card nzTitle="{{mall.name}}" [nzActions]="[actionSetting,actionEdit,actionEllipsis]">
+      <div class="mall-date">{{mall.date}}</div>
+      <div class="mall-creator">{{mall.creator}}</div>
+      <div class="mall-address">{{mall.address}}</div>
+    </nz-card>
+    <ng-template #actionSetting>
+      <i nz-icon type="setting" (click)="editMall(mall)"></i>
+    </ng-template>
+    <ng-template #actionEdit>
+      <i nz-icon type="edit" (click)="editRoom(mall)"></i>
+    </ng-template>
+    <ng-template #actionEllipsis>
+      <i nz-icon type="delete" (click)="delMall(mall)"></i>
+    </ng-template>
+  </div>
+</div>
