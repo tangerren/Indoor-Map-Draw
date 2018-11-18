@@ -64,4 +64,8 @@ export class PanelPageComponent implements OnInit {
   changeTrigger(): void {
     this.triggerTemplate = this.customTrigger;
   }
+
+  toggleCollapsed(): void {
+    this.isCollapsed = !this.isCollapsed;
+  }
 }

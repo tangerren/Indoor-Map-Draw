@@ -5,7 +5,7 @@
     <ul nz-menu [nzTheme]="'dark'" [nzMode]="'inline'" [nzInlineCollapsed]="isCollapsed">
       <li nz-submenu>
         <span title>
-          <i class="anticon anticon-user"></i>
+          <i nz-icon type="user" theme="outline"></i>
           <span class="nav-text">楼宇类型</span>
         </span>
         <ul>
@@ -18,7 +18,7 @@
   </nz-sider>
   <nz-layout>
     <nz-header style="background: #fff; padding:0;">
-      <i class="anticon trigger" [class.anticon-menu-fold]="!isCollapsed" [class.anticon-menu-unfold]="isCollapsed" (click)="isCollapsed=!isCollapsed"></i>
+      <i nz-icon [type]="isCollapsed?'menu-unfold':'menu-fold'" (click)="toggleCollapsed()" style="margin-left:10px;"></i>
       <div style="float: right;padding: 2px 20px;">
         <nz-avatar nzIcon="anticon anticon-search" style="background-color:#87d068;"></nz-avatar>&nbsp;&nbsp;&nbsp;&nbsp;
         <nz-avatar nzIcon="anticon anticon-bell" style="background-color:#87d068;"></nz-avatar>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -32,12 +32,12 @@
         <nz-breadcrumb-item>商场</nz-breadcrumb-item>
       </nz-breadcrumb>
       <div style="padding:24px; background: #fff;">
-        <project-modal title="新建楼宇" lable="新建" [mall]="newproj"></project-modal>
+        <!-- <project-modal title="新建楼宇" lable="新建" [mall]="newproj"></project-modal> -->
         <nz-card style="width:300px;margin: 10px;" nzTitle="{{proj.name}}" *ngFor="let proj of projs">
           <div class="proj-date">{{proj.date}}</div>
           <div class="proj-creator">{{proj.creator}}</div>
           <div class="proj-address">{{proj.address}}</div>
-          <project-modal title="编辑楼宇" lable="编辑" [mall]="proj"></project-modal>
+          <!-- <project-modal title="编辑楼宇" lable="编辑" [mall]="proj"></project-modal> -->
         </nz-card>
       </div>
     </nz-content>
@@ -45,5 +45,5 @@
   </nz-layout>
 </nz-layout>
 <ng-template #trigger>
-  <i class="anticon anticon-up"></i>
+  <i nz-icon type="up-square" theme="outline"></i>
 </ng-template>
