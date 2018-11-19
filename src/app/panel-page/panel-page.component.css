@@ -1,6 +1,7 @@
 .cardStyle {
 	display: flex;
 	flex-wrap: wrap;
+	padding: 10px;
 }
 
 .cardStyle>div {

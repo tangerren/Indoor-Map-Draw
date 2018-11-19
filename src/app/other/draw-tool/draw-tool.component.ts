@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import { Map, interaction, layer, source, style, Feature, format } from 'openlayers';
+import { Map, interaction, layer, source, style, Feature, format, geom } from 'ol';
 
 import { lineString } from '@turf/turf';
 
@@ -108,7 +108,7 @@ export class DrawToolComponent implements OnInit {
 
             console.log(this.polygonSelect.getFeatures[0]);
 
-            let eG: ol.geom.LineString = e.feature.getGeometry() as ol.geom.LineString;
+            let eG: geom.LineString = e.feature.getGeometry() as geom.LineString;
             let splited = sP.split(this.polygonSelect.getFeatures[0], lineString(eG.getCoordinates()));
 
             console.log(splited);

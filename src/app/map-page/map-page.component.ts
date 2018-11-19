@@ -1,9 +1,25 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 
-import { Map, View, layer, source, proj, style, Feature, geom, control } from 'openlayers';
+import Map from 'ol/Map';
+import View from 'ol/View';
+import Feature from 'ol/Feature';
 
-import { PolygonSlice } from '../gis-util/split-polygon';
-import { polygon, lineString } from '@turf/turf';
+import VectorSource from 'ol/source/Vector';
+import Static from 'ol/source/ImageStatic';
+import OSM from 'ol/source/OSM';
+
+import VectorLayer from 'ol/layer/Vector';
+import ImageLayer from 'ol/layer/Image';
+import TileLayer from 'ol/layer/Tile';
+
+
+import Style from 'ol/style/Style';
+import Stroke from 'ol/style/Stroke';
+import Icon from 'ol/style/Icon';
+
+import { Polygon, fromExtent } from 'ol/geom/Polygon';
+import * as proj from 'ol/proj';
+import MousePosition from 'ol/control/MousePosition';
 
 @Component({
   selector: 'app-map',
@@ -18,35 +34,16 @@ export class MapComponent implements OnInit {
 
   ngOnInit() {
     this.createMap();
-    this.testSplitPolygon();
   }
-
-  testSplitPolygon() {
-    let mian = polygon([[
-      [0, 0],
-      [0, 10],
-      [10, 10],
-      [10, 0],
-      [0, 0]
-    ]]);
-    let xian = lineString([
-      [5, 15],
-      [5, -15]
-    ]);
-    let sP = new PolygonSlice();
-    let splited = sP.split(mian, xian);
-    console.log(splited);
-  }
-
 
   private createMap() {
 
-    const imageStyle = new style.Style({
-      stroke: new style.Stroke({
+    const imageStyle = new Style({
+      stroke: new Stroke({
         color: 'blue',
         width: 3
       }),
-      image: new style.Icon({
+      image: new Icon({
         src: 'https://woshisunwukong.github.io/image/indoor-map.jpg',
         crossOrigin: 'Anonymous',
         scale: 1,
@@ -54,17 +51,17 @@ export class MapComponent implements OnInit {
       }),
 
     });
-    const vecLayer = new layer.Vector({
+    const vecLayer = new VectorLayer({
       style: imageStyle,
-      source: new source.Vector({
+      source: new VectorSource({
         features: [new Feature({
-          geometry: geom.Polygon.fromExtent([11855662.310034806, 3452759.5557873524, 11855728.822132856, 3452823.3714489955])
+          geometry: fromExtent([11855662.310034806, 3452759.5557873524, 11855728.822132856, 3452823.3714489955])
         })]
       })
     });
 
-    const imageLayer = new layer.Image({
-      source: new source.ImageStatic({
+    const imageLayer = new ImageLayer({
+      source: new Static({
         url: 'https://woshisunwukong.github.io/image/indoor-map.jpg',
         imageExtent: [11855662.310034806, 3452759.5557873524, 11855728.822132856, 3452823.3714489955],
         projection: 'EPSG:3857'
@@ -77,16 +74,15 @@ export class MapComponent implements OnInit {
     this.map = new Map({
       target: 'map',
       layers: [
-        new layer.Tile({
-          source: new source.OSM()
+        new TileLayer({
+          source: new OSM()
         })
       ],
       view: new View({
         center: proj.fromLonLat([106.50164388120174, 29.6043605183267]),
         zoom: 20
       }),
-      controls: [new control.MousePosition({
-        className: 'position-lable',
+      controls: [new MousePosition({
         projection: 'EPSG:3857'
       })]
     });
