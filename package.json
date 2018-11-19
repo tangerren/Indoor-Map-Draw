@@ -20,7 +20,7 @@
     "@turf/turf": "^5.1.6",
     "core-js": "^2.5.4",
     "ng-zorro-antd": "^1.8.0",
-    "openlayers": "^4.6.5",
+    "ol": "^5.3.0",
     "rxjs": "^6.3.3",
     "zone.js": "^0.8.26"
   },
@@ -30,7 +30,6 @@
     "@angular/compiler-cli": "^7.0.3",
     "@angular/language-service": "^7.0.3",
     "@types/node": "^10.12.3",
-    "@types/openlayers": "^4.6.12",
     "codelyzer": "^4.5.0",
     "ts-node": "^7.0.1",
     "tslint": "^5.11.0",
