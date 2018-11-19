@@ -11,7 +11,6 @@ import zh from '@angular/common/locales/zh';
 
 import { AppComponent } from './app.component';
 import { PanelPageComponent } from './panel-page/pane-page.component';
-import { MapComponent } from './map-page/map-page.component';
 
 import { LoginComponent } from './login-page/login-page.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
@@ -26,7 +25,6 @@ registerLocaleData(zh);
 	declarations: [
 		AppComponent,
 		PanelPageComponent,
-		MapComponent,
 		LoginComponent,
 		PageNotFoundComponent
 	],
@@ -38,7 +36,10 @@ registerLocaleData(zh);
 		// 路由模块
 		AppRoutes
 	],
-	providers: [SaveToDbService, { provide: NZ_I18N, useValue: zh_CN }, { provide: LocationStrategy, useClass: HashLocationStrategy }
+	providers: [
+		SaveToDbService,
+		{ provide: NZ_I18N, useValue: zh_CN },
+		{ provide: LocationStrategy, useClass: HashLocationStrategy }
 	],
 	bootstrap: [AppComponent]
 })

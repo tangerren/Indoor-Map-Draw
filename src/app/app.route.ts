@@ -6,11 +6,14 @@ import { MapComponent } from './map-page/map-page.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 const routes: Routes = [
-	{ path: 'panel', component: PanelPageComponent },
-	{ path: 'map', component: MapComponent },
+	{ path: 'panel', component: PanelPageComponent, runGuardsAndResolvers: 'always' },
+	{
+		path: 'map',
+		loadChildren: './map-page/map-page.moudle#MapPageModule',
+	},
 	{
 		path: 'edit',
-		loadChildren: './edit-page/edit.page.module#EditPageModule',
+		loadChildren: './edit-page/edit-page.module#EditPageModule',
 	},
 	{ path: '', redirectTo: '/panel', pathMatch: 'full' },
 	{ path: '**', component: PageNotFoundComponent }
@@ -19,7 +22,7 @@ const routes: Routes = [
 @NgModule({
 	imports: [
 		RouterModule.forRoot(
-			routes,
+			routes, { onSameUrlNavigation: 'reload' }
 			// { enableTracing: true }// <-- debugging purposes only
 		)
 	],
