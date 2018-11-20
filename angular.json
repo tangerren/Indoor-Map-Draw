@@ -51,6 +51,7 @@
             ],
             "styles": [
               "node_modules/ng-zorro-antd/src/ng-zorro-antd.min.css",
+              "node_modules/ol/ol.css",
               "src/assets/styles.css"
             ],
             "scripts": []

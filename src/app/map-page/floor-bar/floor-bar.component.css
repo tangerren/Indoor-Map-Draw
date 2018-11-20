@@ -1,0 +1,9 @@
+.floor-container {
+	position: absolute;
+	top: 70px;
+	z-index: 99;
+	left: 7px;
+	background: #000;
+	color: #FFF;
+	padding: 5px;
+}

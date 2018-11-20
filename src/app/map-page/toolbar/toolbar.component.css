@@ -1,0 +1,6 @@
+.toolbar-container{
+    position: absolute;
+    top: 7px;
+    z-index: 99;
+    right: 40px;
+}
