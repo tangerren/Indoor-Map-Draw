@@ -2,8 +2,31 @@
 	position: absolute;
 	top: 70px;
 	z-index: 99;
-	left: 7px;
-	background: #000;
+	left: 0px;
+	background: #0a3449;
 	color: #FFF;
 	padding: 5px;
+	font-size: 16px;
+	font-family: 微软雅黑;
+	font-weight: 500;
+}
+
+.floor-indicator {
+	border: 1px solid #607d8b;
+	text-align: center;
+	cursor: pointer;
+	width: 35px;
+	height: 35px;
+	line-height: 35px;
+}
+
+.floor-indicator:hover {
+	color: #00BCD4;
+	font-weight: 800;
+}
+
+.floor-container>.selected {
+	color: #38d0e4;
+	font-weight: 800;
+	background-color: #FFEB3B;
 }
