@@ -1,8 +1,9 @@
 <div class="toolbar-container">
-  <button>编辑属性</button>
-  <button>绘制多边形</button>
-  <button>绘制矩形</button>
-  <button>绘制圆</button>
-  <button>切割面</button>
-  <button>保存</button>
+  <button (click)="editProp($event)">编辑属性</button>
+  <button (click)="editVector($event)">编辑节点</button>
+  <button (click)="drawPolygon($event)">绘制多边形</button>
+  <button (click)="drawRec($event)">绘制矩形</button>
+  <button (click)="drawCircle($event)">绘制圆</button>
+  <button (click)="splitPolygon($event)">切割面</button>
+  <button (click)="saveFloor($event)">保存</button>
 </div>

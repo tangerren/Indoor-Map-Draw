@@ -9,8 +9,6 @@ import TileLayer from 'ol/layer/Tile';
 import { defaults as defaultControls, FullScreen } from 'ol/control.js';
 import * as proj from 'ol/proj';
 
-import ToolbarComponent from './toolbar/toolbar.component';
-
 @Component({
   selector: 'app-map',
   templateUrl: './map-page.component.html',
@@ -44,7 +42,7 @@ export class MapComponent implements OnInit {
         new TileLayer({
           source: new OSM({ attributions: false })
         }),
-        imageLayer
+        // imageLayer
       ],
       view: new View({
         center: proj.fromLonLat([106.50164388120174, 29.6043605183267]),
