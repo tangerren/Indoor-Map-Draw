@@ -4,7 +4,6 @@ import { Map, interaction, layer, source, style, Feature, format, geom } from 'o
 import { lineString } from '@turf/turf';
 
 import { RoomPropertiesComponent } from '../room-properties/room-properties.component';
-import { PolygonSlice } from '../../gis-util/split-polygon';
 
 
 @Component({
@@ -104,14 +103,14 @@ export class DrawToolComponent implements OnInit {
             let prop = null;
             // 分割要素
 
-            let sP = new PolygonSlice();
+            // let sP = new PolygonSlice();
 
             console.log(this.polygonSelect.getFeatures[0]);
 
             let eG: geom.LineString = e.feature.getGeometry() as geom.LineString;
-            let splited = sP.split(this.polygonSelect.getFeatures[0], lineString(eG.getCoordinates()));
+            // let splited = sP.split(this.polygonSelect.getFeatures[0], lineString(eG.getCoordinates()));
 
-            console.log(splited);
+            // console.log(splited);
         });
         this.map.addInteraction(this.polyLineDraw);
         this.polyLineDraw.setActive(false);

@@ -1,11 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 import Map from 'ol/Map';
-import Polygon from 'ol/geom/Polygon';
+import GeoJSON from 'ol/format/GeoJSON';
 import Style from 'ol/style/Style';
 import Fill from 'ol/style/Fill';
 import Stroke from 'ol/style/Stroke';
-import Icon from 'ol/style/Icon';
 import CircleStyle from 'ol/style/Circle';
 import VerctorSource from 'ol/source/Vector';
 import VectorLayer from 'ol/layer/Vector';
@@ -15,6 +14,7 @@ import Select from 'ol/interaction/Select';
 import Modify from 'ol/interaction/Modify';
 import Snap from 'ol/interaction/Snap';
 
+import GeoSplit from '../../gis-util/index'
 @Component({
   selector: 'map-toolbar',
   templateUrl: './toolbar.component.html',
@@ -196,12 +196,20 @@ export class ToolbarComponent implements OnInit {
       stopClick: true, // 为true时双击结束绘制，不会放大地图
       style: new Style({ stroke: this.strokeStyle_s })
     });
+    let sp = this.polygonSelect.getFeatures().item(0);
     this.polyLineDraw.once('drawend', (e: Draw.Event) => {
-      this.split().then(() => {
+      this.split(sp, e.feature).then((result) => {
+        let geo = new GeoJSON();
+        let splitResult = geo.readFeatures(result);
+        this.vectorSource.removeFeature(sp);
+        this.vectorSource.addFeatures(splitResult);
         // 要放到异步函数中去清空绘制的图层，因为在DRAWEND的时候，绘制的内容还未放到source中
         this.tempSource.clear();
         this.polygonSelect.getFeatures().clear();
+      }).catch(reason => {
+        console.log('切割错误：' + reason);
       });
+
       this.map.removeInteraction(this.polyLineDraw);
       this.polyLineDraw = null;
     });
@@ -209,15 +217,33 @@ export class ToolbarComponent implements OnInit {
   }
 
   // geoTool 切割geojson
-  split() {
-    // TODO:切割要素
+  split(sp, sl) {
     console.log('splited');
     return new Promise((resolve, reject) => {
-      console.log('my code'); // 你的代码
-      if (true) {
-        resolve(); // 将结果result传给resolve（）
+      let geo = new GeoJSON();
+      let sP = JSON.parse(geo.writeFeature(sp)).geometry;
+      let sL = JSON.parse(geo.writeFeature(sl)).geometry;
+      let split = new GeoSplit(sP, sL);
+      let geos: any = split.split();
+
+      // 组合成geojson格式  FeatureCollection
+      let ps = [];
+      // tslint:disable-next-line:no-shadowed-variable
+      geos.forEach((geo: any) => {
+        ps.push({
+          "type": "Feature",
+          "properties": {},
+          "geometry": geo
+        });
+      });
+      console.log(JSON.stringify(ps));
+      if (ps) {
+        resolve({
+          "type": "FeatureCollection",
+          "features": ps
+        });
       } else {
-        reject(); // 如果你的代码执行没有成功或者出现了异常
+        reject('切割没有生成结果');
       }
     });
   }
