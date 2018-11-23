@@ -18,6 +18,7 @@
     "@angular/platform-browser-dynamic": "^7.0.3",
     "@angular/router": "^7.0.3",
     "@turf/turf": "^5.1.6",
+    "@types/geojson": "^7946.0.4",
     "core-js": "^2.5.4",
     "ng-zorro-antd": "^1.8.0",
     "ol": "^5.3.0",
