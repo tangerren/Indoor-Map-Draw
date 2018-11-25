@@ -9,7 +9,7 @@ import CircleStyle from 'ol/style/Circle';
 import VerctorSource from 'ol/source/Vector';
 import VectorLayer from 'ol/layer/Vector';
 import Draw from 'ol/interaction/Draw';
-import { createBox } from 'ol/interaction/Draw';
+import { createBox, createRegularPolygon } from 'ol/interaction/Draw';
 import Select from 'ol/interaction/Select';
 import Modify from 'ol/interaction/Modify';
 import Snap from 'ol/interaction/Snap';
@@ -121,7 +121,7 @@ export class ToolbarComponent implements OnInit {
 	drawCircle(event) {
 		event.stopPropagation();
 		this.clearInteraction();
-		this.addDrawInteractions('Circle');
+		this.addDrawInteractions('Circle', createRegularPolygon(0));
 	}
 	// 切割多边形
 	splitPolygon(event) {
@@ -137,7 +137,27 @@ export class ToolbarComponent implements OnInit {
 
 	// 保存
 	saveFloor(event) {
+		event.stopPropagation();
+		this.clearInteraction();
+	}
 
+	// 移除交互
+	private clearInteraction() {
+		this.map.removeInteraction(this.polygonDraw);
+
+		this.map.removeInteraction(this.polyLineDraw);
+		this.polyLineDraw = null;
+
+		this.map.removeInteraction(this.snap);
+		this.map.removeInteraction(this.polygonSelect);
+		this.map.removeInteraction(this.polygonModify);
+
+		this.pLayer.getStyle().setStroke(this.strokeStyle);
+		this.pLayer.changed();
+
+		if (this.polygonSelect) {
+			this.polygonSelect.getFeatures().clear();
+		}
 	}
 
 	// 添加绘制多边形交互
@@ -182,22 +202,6 @@ export class ToolbarComponent implements OnInit {
 		});
 	}
 
-	// 移除交互
-	private clearInteraction() {
-		this.map.removeInteraction(this.polygonDraw);
-		this.map.removeInteraction(this.polyLineDraw);
-		this.map.removeInteraction(this.snap);
-		this.map.removeInteraction(this.polygonSelect);
-		this.map.removeInteraction(this.polygonModify);
-
-		this.pLayer.getStyle().setStroke(this.strokeStyle);
-		this.pLayer.changed();
-
-		if (this.polygonSelect) {
-			this.polygonSelect.getFeatures().clear();
-		}
-	}
-
 	// 绘制切割线
 	drawLineToSpilt() {
 		this.polyLineDraw = new Draw({
@@ -217,6 +221,9 @@ export class ToolbarComponent implements OnInit {
 				this.tempSource.clear();
 				this.polygonSelect.getFeatures().clear();
 			}).catch(reason => {
+				this.polygonSelect.getFeatures().clear();
+				this.tempSource.clear();
+				alert("请绘制能够分隔一个面的线");
 				console.log('切割错误：' + reason);
 			});
 
