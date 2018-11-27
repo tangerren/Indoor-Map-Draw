@@ -68,7 +68,8 @@ export class ToolbarComponent implements OnInit {
 				fill: this.fillStyle,
 				stroke: this.strokeStyle_d,
 				image: this.imageStyle
-			})
+			}),
+			zIndex: 2
 		});
 		this.map.addLayer(this.pLayer);
 
@@ -79,7 +80,8 @@ export class ToolbarComponent implements OnInit {
 				fill: this.fillStyle,
 				stroke: this.strokeStyle_s,
 				image: this.imageStyle
-			})
+			}),
+			zIndex: 3
 		});
 		this.map.addLayer(this.tempLayer);
 	}
