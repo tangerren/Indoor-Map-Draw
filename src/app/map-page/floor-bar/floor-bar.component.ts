@@ -50,7 +50,7 @@ export class FloorBarComponent implements OnInit {
             url: url,
             projection: 'EPSG:3857'
           }),
-          zIndex: 0
+          zIndex: 1
         });
         this.map.addLayer(this.imageLayer);
       }

@@ -26,12 +26,16 @@ export class MapComponent implements OnInit {
 
     const ele = this.elementRef.nativeElement.querySelector('#map');
     console.log(ele);
+    /**
+     * 图层顺序：
+     * OSM地图--》影像地图--》工作面图层--》切割县图层
+     */
     this.map = new Map({
       target: 'map',
       layers: [
         new TileLayer({
           source: new OSM({ attributions: false }),
-          zIndex: 1
+          zIndex: 0
         })
       ],
       view: new View({
