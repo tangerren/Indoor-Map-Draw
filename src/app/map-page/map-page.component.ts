@@ -28,7 +28,7 @@ export class MapComponent implements OnInit {
     console.log(ele);
     /**
      * 图层顺序：
-     * OSM地图--》影像地图--》工作面图层--》切割县图层
+     * OSM地图--》影像地图--》工作面图层--》切割线图层
      */
     this.map = new Map({
       target: 'map',
