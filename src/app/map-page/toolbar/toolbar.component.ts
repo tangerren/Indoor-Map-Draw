@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import Map from 'ol/Map';
 import GeoJSON from 'ol/format/GeoJSON';
@@ -22,6 +22,7 @@ import GeoSplit from '../../gis-util/index';
 })
 export class ToolbarComponent implements OnInit {
 
+	@Output() saveData = new EventEmitter<boolean>();
 	@Input() map: Map;
 	@Input() pLayer: VectorLayer;
 	@Input() sLayer: VectorLayer;
@@ -134,6 +135,8 @@ export class ToolbarComponent implements OnInit {
 	saveFloor(event) {
 		event.stopPropagation();
 		this.clearInteraction();
+		// 保存编辑的结果
+		this.saveData.emit();
 	}
 
 	// 移除交互

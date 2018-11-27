@@ -1,10 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import Map from 'ol/Map';
 import ImageLayer from 'ol/layer/Image';
 import Static from 'ol/source/ImageStatic';
 
 import { FloorService } from '../../services/floor.service';
+import { Floor } from 'src/app/types/Floor';
 
 
 @Component({
@@ -15,31 +16,33 @@ import { FloorService } from '../../services/floor.service';
 export class FloorBarComponent implements OnInit {
   @Input() map: Map;
   @Input() imageLayer: ImageLayer;
+  @Output() saveData = new EventEmitter<boolean>();
+  @Output() setFloor = new EventEmitter<Floor>();
 
   selectedFloor: any;
   private floorList = [
-    { index: 5, id: '' },
-    { index: 4, id: '' },
-    { index: 3, id: '' },
-    { index: 2, id: '' },
-    { index: 1, id: '' },
-    { index: -1, id: '' }
+    { index: 5, id: 5555555555 },
+    { index: 4, id: 4444444444444 },
+    { index: 3, id: 33333333333333 },
+    { index: 2, id: 22222222222 },
+    { index: 1, id: 111111111111 },
+    { index: -1, id: '-1-1-1-1-1-1-1-' }
   ];
 
   constructor(private floorService: FloorService) { }
   ngOnInit() {
-    this.selectedFloor = this.floorList[0];
-    this.loadImgByFloorId(this.selectedFloor.id);
+    this.onSelect(this.floorList[0]);
   }
-
 
   onSelect(floor) {
     this.selectedFloor = floor;
     this.loadImgByFloorId(floor.id);
-    // TODO:保存上次编辑的结果,清空图层
+    // 保存上次编辑的结果,清空图层
+    this.saveData.emit(true);
+    this.setFloor.emit(floor);
   }
 
-  loadImgByFloorId(id: string) {
+  private loadImgByFloorId(id: string) {
     this.floorService.getImageById(id).subscribe(
       url => {
         this.imageLayer.setSource(new Static({

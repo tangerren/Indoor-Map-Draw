@@ -6,8 +6,10 @@ import OSM from 'ol/source/OSM';
 import ImageLayer from 'ol/layer/Image';
 import VectorLayer from 'ol/layer/Vector';
 import TileLayer from 'ol/layer/Tile';
+import GeoJSON from 'ol/format/GeoJSON';
 import { defaults as defaultControls, FullScreen } from 'ol/control.js';
 import * as proj from 'ol/proj';
+import { Floor } from '../types/Floor';
 
 @Component({
   selector: 'app-map',
@@ -23,6 +25,7 @@ export class MapComponent implements OnInit {
   private pLayer = new VectorLayer({ zIndex: 2 });
   // 创建绘图图层
   private sLayer = new VectorLayer({ zIndex: 3 });
+  currentFloor: string;
 
   constructor(protected elementRef: ElementRef) { }
 
@@ -58,7 +61,23 @@ export class MapComponent implements OnInit {
     });
   }
 
-  private saveData() {
+  setFloor(floor: Floor) {
+    this.currentFloor = floor.id;
+  }
 
+  // 保存当前图层的数据
+  saveData(isClear: boolean) {
+    let pSource = this.pLayer.getSource();
+    let fs = pSource.getFeatures();
+    if (fs.length === 0) {
+      return;
+    }
+    let geo = new GeoJSON();
+    let s = geo.writeFeatures(fs);
+    // TODO: 请求接口保存到数据库(根据对应的floorId  this.currentFloor )
+    console.log("保存到数据库：【" + this.currentFloor + '】' + s);
+    if (isClear) {
+      pSource.clear();
+    }
   }
 }
