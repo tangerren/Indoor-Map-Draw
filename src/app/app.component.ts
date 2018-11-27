@@ -16,7 +16,6 @@ export class AppComponent implements OnInit {
   currentModule = "楼宇管理";
   mallName = "";
 
-  @ViewChild('trigger') customTrigger: TemplateRef<void>;
   constructor(private router: Router) { }
 
   ngOnInit() { }

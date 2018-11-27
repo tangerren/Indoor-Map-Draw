@@ -1,8 +1,6 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Map, interaction, layer, source, style, Feature, format, geom } from 'ol';
 
-import { lineString } from '@turf/turf';
-
 import { RoomPropertiesComponent } from '../room-properties/room-properties.component';
 
 

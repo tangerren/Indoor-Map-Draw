@@ -23,16 +23,17 @@ import GeoSplit from '../../gis-util/index';
 export class ToolbarComponent implements OnInit {
 
 	@Input() map: Map;
+	@Input() pLayer: VectorLayer;
+	@Input() sLayer: VectorLayer;
+
+	private pLayerSource = new VerctorSource();
+	private sLayerSource = new VerctorSource();
+
 	private polygonDraw: Draw;
 	private polyLineDraw: Draw;
 	private polygonSelect: Select;
 	private polygonModify: Modify;
 	private snap: Snap;
-
-	private pLayer: VectorLayer;
-	private tempLayer: VectorLayer;
-	private pLayerSource = new VerctorSource();
-	private tempSource = new VerctorSource();
 
 	private fillStyle = new Fill({
 		color: 'rgba(255, 255, 255, 0.2)'
@@ -62,28 +63,20 @@ export class ToolbarComponent implements OnInit {
 		this.strokeStyle_s.setColor('#FF0000');
 
 		// 创建绘图图层
-		this.pLayer = new VectorLayer({
-			source: this.pLayerSource,
-			style: new Style({
-				fill: this.fillStyle,
-				stroke: this.strokeStyle_d,
-				image: this.imageStyle
-			}),
-			zIndex: 2
-		});
-		this.map.addLayer(this.pLayer);
+		this.pLayer.setSource(this.pLayerSource);
+		this.pLayer.setStyle(new Style({
+			fill: this.fillStyle,
+			stroke: this.strokeStyle_d,
+			image: this.imageStyle
+		}));
 
 		// 创建绘图图层
-		this.tempLayer = new VectorLayer({
-			source: this.tempSource,
-			style: new Style({
-				fill: this.fillStyle,
-				stroke: this.strokeStyle_s,
-				image: this.imageStyle
-			}),
-			zIndex: 3
-		});
-		this.map.addLayer(this.tempLayer);
+		this.sLayer.setSource(this.sLayerSource);
+		this.sLayer.setStyle(new Style({
+			fill: this.fillStyle,
+			stroke: this.strokeStyle_s,
+			image: this.imageStyle
+		}));
 	}
 
 	// 编辑属性
@@ -207,7 +200,7 @@ export class ToolbarComponent implements OnInit {
 	// 绘制切割线
 	drawLineToSpilt() {
 		this.polyLineDraw = new Draw({
-			source: this.tempSource,
+			source: this.sLayerSource,
 			type: 'LineString',
 			stopClick: true, // 为true时双击结束绘制，不会放大地图
 			style: new Style({ stroke: this.strokeStyle_s })
@@ -220,11 +213,11 @@ export class ToolbarComponent implements OnInit {
 				this.pLayerSource.removeFeature(sp);
 				this.pLayerSource.addFeatures(splitResult);
 				// 要放到异步函数中去清空绘制的图层，因为在DRAWEND的时候，绘制的内容还未放到source中
-				this.tempSource.clear();
+				this.sLayerSource.clear();
 				this.polygonSelect.getFeatures().clear();
 			}).catch(reason => {
 				this.polygonSelect.getFeatures().clear();
-				this.tempSource.clear();
+				this.sLayerSource.clear();
 				alert("请绘制能够分隔一个面的线");
 				console.log('切割错误：' + reason);
 			});
