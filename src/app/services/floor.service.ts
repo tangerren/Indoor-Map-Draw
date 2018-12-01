@@ -33,4 +33,8 @@ export class FloorService {
 		return a;
 	}
 
+	saveToDb(floorId: string, geo: string) {
+		// TODO: 調用接口，保存到數據庫
+		console.log("保存到数据库：【" + floorId + '】' + geo);
+	}
 }

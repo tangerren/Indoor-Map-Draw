@@ -10,6 +10,7 @@ import GeoJSON from 'ol/format/GeoJSON';
 import { defaults as defaultControls, FullScreen } from 'ol/control.js';
 import * as proj from 'ol/proj';
 import { Floor } from '../types/Floor';
+import { FloorService } from '../services/floor.service';
 
 @Component({
   selector: 'app-map',
@@ -27,7 +28,7 @@ export class MapComponent implements OnInit {
   private sLayer = new VectorLayer({ zIndex: 3 });
   currentFloor: string;
 
-  constructor(protected elementRef: ElementRef) { }
+  constructor(protected elementRef: ElementRef, private floorService: FloorService) { }
 
   ngOnInit() {
     this.createMap();
@@ -74,8 +75,8 @@ export class MapComponent implements OnInit {
     }
     let geo = new GeoJSON();
     let s = geo.writeFeatures(fs);
-    // TODO: 请求接口保存到数据库(根据对应的floorId  this.currentFloor )
-    console.log("保存到数据库：【" + this.currentFloor + '】' + s);
+    // 请求接口保存到数据库(根据对应的floorId  this.currentFloor )
+    this.floorService.saveToDb(this.currentFloor, s);
     if (isClear) {
       pSource.clear();
     }
