@@ -1,4 +1,24 @@
-<p>
-<h1>根据上一步的楼层数，自动生成楼层表单，上传图纸</h1>
-<button nz-button nzType="primary" (click)="getMallInfo()">上一步</button>
-<button nz-button nzType="primary" (click)="saveFloorInfo()">保存，下一步</button>
+<div nz-row>
+	<div nz-col nzSpan="4"></div>
+	<div nz-col nzSpan="16">
+		<div style="padding: 10px 15px;float: left;" *ngFor="let floor of floors;let i = index">
+			<nz-upload nzAction="https://graph.baidu.com/upload" nzName="avatar" nzListType="picture-card" [nzShowUploadList]="false"
+			 [nzBeforeUpload]="beforeUpload" (nzChange)="handleChange($event,i)" nzFileType="image/png,image/jpeg,image/gif,image/bmp">
+				<ng-container *ngIf="!avatarUrl[i]">
+					<i nz-icon type="plus"></i>
+					<div class="ant-upload-text">上传{{floor.index}}楼</div>
+				</ng-container>
+				<img *ngIf="avatarUrl[i]" [src]="avatarUrl[i]" style="width:86px;height:86px;">
+			</nz-upload>
+			<p style="text-align: center;">{{floor.index}}楼</p>
+		</div>
+	</div>
+</div>
+<div nz-row>
+	<div nz-col nzSpan="5" [nzOffset]="6">
+		<button nz-button nzType="primary" (click)="getMallInfo()">上一步</button>
+	</div>
+	<div nz-col nzSpan="5">
+		<button nz-button nzType="primary" (click)="saveFloorInfo()">完 成</button>
+	</div>
+</div>

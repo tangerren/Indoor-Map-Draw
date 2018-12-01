@@ -9,12 +9,14 @@ import { Floor } from '../types/Floor';
 })
 
 export class FloorService {
-	iamgeUrl: string;
+
+	// TODO:查询该楼宇楼层信息
+	floorUrl = "MockData/floor.json?mallId=";
 
 	constructor(private http: HttpClient) { }
 
-	getFloors(): Observable<Floor[]> {
-		return this.http.get<Floor[]>(this.iamgeUrl);
+	getFloors(mallId: string): Observable<Floor[]> {
+		return this.http.get<Floor[]>(this.floorUrl + mallId);
 	}
 
 	getImageById(id: string): Observable<string> {
