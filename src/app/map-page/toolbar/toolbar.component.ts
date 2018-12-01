@@ -165,7 +165,7 @@ export class ToolbarComponent implements OnInit {
 			type: type,
 			geometryFunction: geoFun
 		});
-		this.polygonDraw.on('drawend', (e: Draw.Event) => {
+		this.polygonDraw.on('drawend', (e) => {
 			console.log('drawed' + this.pLayerSource);
 		});
 		this.map.addInteraction(this.polygonDraw);
@@ -209,7 +209,7 @@ export class ToolbarComponent implements OnInit {
 			style: new Style({ stroke: this.strokeStyle_s })
 		});
 		let sp = this.polygonSelect.getFeatures().item(0);
-		this.polyLineDraw.once('drawend', (e: Draw.Event) => {
+		this.polyLineDraw.once('drawend', (e) => {
 			this.split(sp, e.feature).then((result) => {
 				let geo = new GeoJSON();
 				let splitResult = geo.readFeatures(result);
