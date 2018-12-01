@@ -8,11 +8,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgZorroAntdModule, NZ_I18N, zh_CN } from 'ng-zorro-antd';
 import zh from '@angular/common/locales/zh';
 
-
 import { AppComponent } from './app.component';
-import { PanelPageComponent } from './panel-page/pane-page.component';
-
 import { LoginComponent } from './login-page/login-page.component';
+import { PanelPageComponent } from './panel-page/pane-page.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 import { SaveToDbService } from './services/saveToDb.service';
