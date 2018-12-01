@@ -25,7 +25,7 @@ export class Mall {
   /**
    * 总层数
    */
-  floors?: number;
+  floorNum?: number;
   /**
    * 是否展示地下层
    */

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 import { MallService } from 'src/app/services/mall.service';
 import { Mall } from 'src/app/types/Mall';
 
@@ -10,22 +10,23 @@ import { Mall } from 'src/app/types/Mall';
 })
 export class MallComponent implements OnInit {
   mall: Mall = new Mall();
-  id = this.mall.id;
-  name = this.mall.name;
-  address = this.mall.address;
-  type = this.mall.type;
-  floorNum = this.mall.floors;
-  minFloor = this.mall.minFloor;
-  isUnground = this.mall.isUnground;
-  pName = this.mall.pName;
-  pTel = this.mall.pTel;
 
-  constructor(private router: Router, private mallService: MallService) { }
+  constructor(private router: Router, private activeRoute: ActivatedRoute, private mallService: MallService) { }
 
   ngOnInit() {
-    this.mall.id = "mall-" + Math.random().toString(36).substr(2);
-    this.mall.creator = "王二小";
-    this.mall.date = new Date();
+    this.activeRoute.queryParams.subscribe((params: Params) => {
+      if (params['id'] != null && params['id'] !== "") {
+        this.mall.id = params['id'];
+        this.mallService.getMallById(this.mall.id).subscribe(
+          data => { this.mall = data[Math.floor(Math.random() * 10)]; }
+        );
+      } else {
+        this.mall.id = "mall-" + Math.random().toString(36).substr(2);
+        this.mall.creator = "王二小";
+        this.mall.date = new Date();
+      }
+    });
+
   }
 
   return() {

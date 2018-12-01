@@ -16,7 +16,7 @@ export class PanelPageComponent implements OnInit {
   constructor(private router: Router, private mallService: MallService) { }
 
   ngOnInit(): void {
-    this.mallService.heroesUrl = "MockData/malls.json";
+    this.mallService.mallsUrl = "MockData/malls.json";
     this.mallService.getMalls().subscribe((data: Mall[]) => {
       this.malls = data;
     });

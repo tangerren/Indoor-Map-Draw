@@ -9,12 +9,18 @@ import { Mall } from '../types/Mall';
 })
 
 export class MallService {
-  heroesUrl: string;
+  mallsUrl = "MockData/malls.json";
+  mallUrl = "MockData/malls.json";
 
   constructor(private http: HttpClient) { }
 
   getMalls(): Observable<Mall[]> {
-    return this.http.get<Mall[]>(this.heroesUrl);
+    return this.http.get<Mall[]>(this.mallsUrl);
+  }
+
+  getMallById(id: string): Observable<Mall[]> {
+    // TODO: 修改真实返回类型为Observable<Mall>
+    return this.http.get<Mall[]>(this.mallUrl + "?" + id);
   }
 
   saveBaseInfo(mall: Mall) {

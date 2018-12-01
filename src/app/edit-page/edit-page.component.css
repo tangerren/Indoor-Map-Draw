@@ -4,4 +4,7 @@
 
 .steps-content {
 	padding-top: 30px;
+	height: 690px;
+	display: block;
+	overflow: auto;
 }
