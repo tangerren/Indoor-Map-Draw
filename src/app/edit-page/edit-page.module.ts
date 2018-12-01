@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 
@@ -34,7 +36,8 @@ const routes: Routes = [
 		SubimitComponent
 	],
 	imports: [
-		CommonModule,
+		CommonModule, FormsModule,
+		ReactiveFormsModule,
 		NgZorroAntdModule,
 		RouterModule.forChild(routes)
 	],

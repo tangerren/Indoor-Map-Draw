@@ -2,14 +2,48 @@
  * 楼宇属性
  */
 export class Mall {
-  id: string; // 唯一标识
-  name: string; // 楼宇名称
-  startFloor?: number; // 开始楼层(地下几层)
-  endFloor?: number; // 结束楼层
-  floors?: number; // 总层数
-  address: string; // 地址
-  pName: string; // 联系人姓名
-  pTel: string; // 联系人电话
-  date: string; // 创建时间
-  creator: string; // 创建者
+  /**
+   * 唯一标识
+   */
+  id: string;
+  /**
+   * 楼宇名称
+   */
+  name?: string;
+  /**
+   * 楼宇地址
+   */
+  address?: string;
+  /**
+   * 楼宇类型
+   */
+  type?: string;
+  /**
+   * 开始楼层(地下几层)
+   */
+  minFloor?: number;
+  /**
+   * 总层数
+   */
+  floors?: number;
+  /**
+   * 是否展示地下层
+   */
+  isUnground?: boolean;
+  /**
+   * 管理员姓名
+   */
+  pName?: string;
+  /**
+   * 管理员电话
+   */
+  pTel?: string;
+  /**
+   * 创建时间
+   */
+  date?: Date;
+  /**
+   * 创建者ID
+   */
+  creator?: string;
 }

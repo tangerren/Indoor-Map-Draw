@@ -1,2 +1,64 @@
-<h1>填写楼宇基本信息</h1>
-<button nz-button nzType="primary" (click)="saveMallInfo()">保存，下一步</button>
+<form nz-form>
+	<nz-form-item>
+		<nz-form-label nzFor="name" [nzSpan]="6">楼宇名称 </nz-form-label>
+		<nz-form-control [nzSpan]="14">
+			<input nz-input name="name" [(ngModel)]="name">
+		</nz-form-control>
+	</nz-form-item>
+	<nz-form-item>
+		<nz-form-label nzFor="addrees" [nzSpan]="6">楼宇地点 </nz-form-label>
+		<nz-form-control [nzSpan]="14">
+			<input nz-input name="address" [(ngModel)]="address">
+		</nz-form-control>
+	</nz-form-item>
+	<nz-form-item>
+		<nz-form-label nzFor="type" [nzSpan]="6">楼宇类型 </nz-form-label>
+		<nz-form-control [nzSpan]="14">
+			<nz-radio-group name="type" [(ngModel)]="type">
+				<label nz-radio nzValue="market">超市</label>
+				<label nz-radio nzValue="vMarket">菜市场</label>
+				<label nz-radio nzValue="sMarket">商场</label>
+				<label nz-radio nzValue="school">学校</label>
+				<label nz-radio nzValue="other">其他</label>
+			</nz-radio-group>
+		</nz-form-control>
+	</nz-form-item>
+	<nz-form-item>
+		<nz-form-label nzFor="floorNum" [nzSpan]="6">总楼层数 </nz-form-label>
+		<nz-form-control [nzSpan]="14">
+			<nz-input-number name="floorNum" nz-input [(ngModel)]="floorNum"></nz-input-number>
+		</nz-form-control>
+	</nz-form-item>
+	<nz-form-item>
+		<nz-form-label nzFor="minFloor" [nzSpan]="6">最低楼层 </nz-form-label>
+		<nz-form-control [nzSpan]="14">
+			<nz-input-number name="minFloor" nz-input [(ngModel)]="minFloor"></nz-input-number>
+		</nz-form-control>
+	</nz-form-item>
+	<nz-form-item>
+		<nz-form-label nzFor="isUnground" [nzSpan]="6">是否展示地下层 </nz-form-label>
+		<nz-form-control [nzSpan]="14">
+			<label name="isUnground" nz-checkbox [(ngModel)]="isUnground"></label> </nz-form-control>
+	</nz-form-item>
+	<nz-form-item>
+		<nz-form-label nzFor="pName" [nzSpan]="6">管理员姓名 </nz-form-label>
+		<nz-form-control [nzSpan]="6">
+			<input nz-input name="pName" [(ngModel)]="pName">
+		</nz-form-control>
+		<nz-form-label nzFor="pTel" [nzSpan]="2">联系方式 </nz-form-label>
+		<nz-form-control [nzSpan]="6">
+			<input nz-input name="pTel" [(ngModel)]="pTel">
+		</nz-form-control>
+	</nz-form-item>
+	<nz-form-item>
+		<nz-form-control [nzSpan]="3" [nzOffset]="6">
+			<button nz-button nzType="primary" (click)="return()">返回</button>
+		</nz-form-control>
+		<nz-form-control [nzSpan]="3">
+			<button nz-button nzType="primary" (click)="save()">保存</button>
+		</nz-form-control>
+		<nz-form-control [nzSpan]="3">
+			<button nz-button nzType="primary" (click)="next()"> 下一步</button>
+		</nz-form-control>
+	</nz-form-item>
+</form>

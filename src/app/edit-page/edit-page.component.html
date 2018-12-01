@@ -1,11 +1,11 @@
-<p>
-  编辑楼宇信息, 新建的时候：进度页展示, 编辑的时候：tab页展示
-</p>
-<nz-steps [nzCurrent]="current">
-  <nz-step nzTitle="基本信息" nzDescription="填写楼宇基本信息"></nz-step>
-  <nz-step nzTitle="楼层信息" nzDescription="上传楼层附件"></nz-step>
-  <nz-step nzTitle="完成" nzDescription="提交填写信息"></nz-step>
-</nz-steps>
+<div class="stepC">
+  <nz-steps [nzCurrent]="current">
+    <nz-step nzTitle="基本信息" nzDescription="填写楼宇基本信息"></nz-step>
+    <nz-step nzTitle="楼层信息" nzDescription="上传楼层附件"></nz-step>
+    <nz-step nzTitle="完成" nzDescription="提交填写信息"></nz-step>
+  </nz-steps>
+</div>
+
 <div class="steps-content">
   <router-outlet></router-outlet>
 </div>

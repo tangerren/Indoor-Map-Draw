@@ -17,4 +17,7 @@ export class MallService {
     return this.http.get<Mall[]>(this.heroesUrl);
   }
 
+  saveBaseInfo(mall: Mall) {
+
+  }
 }
