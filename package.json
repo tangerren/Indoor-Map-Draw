@@ -30,7 +30,6 @@
     "@angular/language-service": "^7.0.3",
     "@types/node": "^10.12.3",
     "@types/geojson": "^7946.0.4",
-    "@types/ol": "自定义",
     "codelyzer": "^4.5.0",
     "ts-node": "^7.0.1",
     "tslint": "^5.11.0",
