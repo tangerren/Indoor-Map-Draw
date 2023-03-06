@@ -26,7 +26,7 @@
   "devDependencies": {
     "@angular-devkit/build-angular": "^15.2.1",
     "@angular/cli": "^15.2.1",
-    "@angular/compiler-cli": "^7.0.3",
+    "@angular/compiler-cli": "^15.2.1",
     "@angular/language-service": "^7.0.3",
     "@types/node": "^10.12.3",
     "@types/geojson": "^7946.0.4",
